@@ -21,11 +21,12 @@ By default, the provided configurations implement the HHC approach (no reliance 
 ## Design
 
 Overview of the two approaches for bootstrapping of in-band control networks:
-[![HSW Bootstrapping Design (relies on RSTP support in data plane)](figures/hsw_seq.png)]()
 
-[![HHC Iterative Bootstrapping Design (no RSTP requirement)](figures/hhc_seq.png)]()
+| HSW (needs RSTP) | HHC (iterative hop-by-hop) |
+|------------|-------------|
+| <img src="figures/hsw_seq.png" width="350"> | <img src="figures/hhc_seq.png" width="350"> |
 
-Details are presented in attached publication.
+Details on both designs are presented in the attached ACM SOSR publication.
 
 ## Usage
 
