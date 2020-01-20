@@ -1,10 +1,10 @@
 # Automated Bootstrapping of In-Band Controlled SDNs
 
-OpenDaylight-compatible modules and exemplary network emulation for bootstrapping of a multi-controller OpenFlow-based in-band control plane.
+- OpenDaylight-compatible modules and exemplary network emulation for bootstrapping of a multi-controller OpenFlow-based in-band control plane.
 
-Full details of the designs are provided in our ACM SIGCOMM SOSR 2020 publication titled: "Automated Bootstrapping of A Fault-Resilient In-Band Control Plane".
+- Full details of the designs are provided in our ACM SIGCOMM SOSR 2020 publication titled: "Automated Bootstrapping of A Fault-Resilient In-Band Control Plane".
 
-By default, the provided configurations implement the HHC approach (no reliance on RSTP) and they do so in a local environment, i.e., all controller instances and switches are instantiated in separate network namespaces in the local host.
+- By default, the provided configuration realizes the introduced HHC approach (no reliance on RSTP) and it does so in a local environment, i.e., all controller instances and switches are instantiated in separate network namespaces in the local host. In case you want to run network emulation or the controller remotely, or you want to establish a cluster of controllers, adjust the configuration scripts in the ```sdn-demo``` and ```emulated-topology``` directory correspondingly.
 
 ---
 
@@ -12,7 +12,7 @@ By default, the provided configurations implement the HHC approach (no reliance 
 ## Directory Explanations
 - *sdn-demo*: Holds the core controller code for building of the ODL distribution.
 
-- *emulated-topolgoy*: Orchestrates the network emulation for easy setup of all topologies described in the paper. 3x3 grid is selected as default. The accompanying config file allows for topology selection, modifications to controller(s) placement, and local / remote emulation. 
+- *emulated-topology*: Orchestrates the network emulation for easy setup of all topologies described in the paper. 3x3 grid is selected as default. The accompanying config file allows for topology selection, modifications to controller(s) placement, and local / remote emulation. 
 
 - *odl-dependencies*: Contains the modified accompanying modules, used in OpenFlow interactions, host / controller topology discovery etc. The implementation of this differs slightly from same-named off-the-shelf ODL modules (details provided in the paper).
 
@@ -50,6 +50,15 @@ Details on both designs are presented in the attached ACM SOSR publication.
 - Run the ```emulate_network.sh``` script in ```emulated-topology```
 - In demo-sdn, run one of the ```exec*``` scripts after the 1st script above has finished (the network and controller namespace are necessary for controller instantiation)
 - Execute the REST script for startup of DHCP server (POSTMAN attached) - only if enabled in XML files starting with "149"
+
+### Results:
+
+- In ODL's DLUX GUI:
+
+| 3x3 Grid (1C) | 
+|------------|
+| <img src="figures/3x3_grid.png" width="350"> |
+
 
 ---
 
