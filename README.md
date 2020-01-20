@@ -42,13 +42,13 @@ Details on both designs are presented in the attached ACM SOSR publication.
 
 ### Build Guide:
 - Build the customized openflowplugin, odl-l2switch and openflowjava components using ```build.sh``` in the corresponding sub-directories of ```odl-dependencies```.
-- Build the ```emulated-topology``` (ref. contained ```bash README.md``` for further instructions)
+- Build the ```emulated-topology``` (ref. contained ```README.md``` for further instructions)
 - Copy the ```run_arping.sh``` script to your chosen location and update the path to script correspondingly in ```demo_sdn/configure_arping_local_remote.sh```
-- Build the ```bash demo-sdn``` using the ```build.sh``` script inside (ref. contained ```bash README.md``` for further information)
+- Build the ```demo-sdn``` using the ```build.sh``` script inside (ref. contained ```README.md``` for further information)
 
 ### Runtime:
-- Run the ```bash emulate_network.sh``` script in ```emulated-topology```
-- In demo-sdn, run one of the ```bash exec*``` scripts after the 1st script above has finished (the network and controller namespace are necessary for controller instantiation)
+- Run the ```emulate_network.sh``` script in ```emulated-topology```
+- In demo-sdn, run one of the ```exec*``` scripts after the 1st script above has finished (the network and controller namespace are necessary for controller instantiation)
 - Execute the REST script for startup of DHCP server (POSTMAN attached) - only if enabled in XML files starting with "149"
 
 ---
