@@ -1,0 +1,67 @@
+module flow-errors {
+	namespace "urn:opendaylight:flow:errors";
+    prefix error;
+
+    description "Openflow error messages.";
+    
+    revision "2013-11-16" {
+        description "Initial revision of error";
+    }
+
+    typedef error-type {
+        description "Openflow error types.";
+        type enumeration {
+            enum hello-failed;
+            enum bad-request;
+            enum bad-action;
+            enum bad-instruction;
+            enum bad-match;
+            enum flow-mod-failed;
+            enum group-mod-failed;
+            enum port-mod-failed;
+            enum table-mod-failed;
+            enum queue-op-failed;
+            enum switch-config-failed;
+            enum role-request-failed;
+            enum meter-mod-failed;
+            enum table-features-failed;
+            enum experimenter {
+                value "65535";
+            }
+        }
+    }
+    
+    grouping error-message {
+        description "Error message structure.";
+        leaf type {
+            type error-type;
+        }
+        
+        leaf code {
+            type uint16;
+        }
+        
+        leaf data {
+            type string;
+        }
+    }
+    
+    grouping experimenter-error-message {
+        description "Experimenter error message structure.";
+        leaf type {
+            type error-type;
+        }
+        
+        leaf exp-type {
+            type uint16;
+        }
+        
+        leaf experimenter-id {
+            type uint32;
+        }
+        
+        leaf data {
+            type string;
+        }
+    }
+}

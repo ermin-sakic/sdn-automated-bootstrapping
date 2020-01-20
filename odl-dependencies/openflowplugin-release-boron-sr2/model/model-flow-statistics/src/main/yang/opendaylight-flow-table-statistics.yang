@@ -1,0 +1,71 @@
+module opendaylight-flow-table-statistics {
+    namespace "urn:opendaylight:flow:table:statistics";
+    prefix flowtablestat;
+
+    import flow-capable-transaction {prefix tr; revision-date "2015-03-04";}
+    import yang-ext {prefix ext; revision-date "2013-07-09";}
+    import opendaylight-inventory {prefix inv;revision-date "2013-08-19";}
+    import flow-node-inventory {prefix flow-node;revision-date "2013-08-19";}
+    import opendaylight-table-types {prefix table-types;revision-date "2013-10-26";}
+    import opendaylight-statistics-types {prefix stat-types;revision-date "2013-09-25";}
+
+    description "Openflow flow table statistics structures.";
+
+    contact
+        "Anilkumar Vishnoi
+        Email: avishnoi@in.ibm.com";
+
+    revision "2013-12-15" {
+        description "Initial revision of flow table statistics model";
+    }
+
+    augment "/inv:nodes/inv:node/flow-node:table" {
+        description "Openflow flow table statistics data into the table node.";
+        ext:augment-identifier "flow-table-statistics-data";
+        uses flow-table-statistics;
+    }
+
+    grouping flow-table-statistics {
+        description "TODO:: simplify.";
+        container flow-table-statistics {
+            uses stat-types:generic-table-statistics;
+        }
+    }
+
+    grouping flow-table-and-statistics-map {
+        status deprecated;
+        description "RPC calls to fetch flow table statistics.";
+
+        list flow-table-and-statistics-map {
+            key "table-id";
+            leaf table-id {
+                type table-types:table-id;
+            }
+            uses stat-types:generic-table-statistics;
+        }
+    }
+
+    rpc get-flow-tables-statistics {
+        status deprecated;
+        description "Fetch statistics of all the flow tables present on the tarnet node";
+
+        input {
+            uses inv:node-context-ref;
+        }
+        output {
+            uses flow-table-and-statistics-map;
+            uses tr:transaction-aware;
+        }
+    }
+
+    //Notification to receive table statistics update
+
+    notification flow-table-statistics-update {
+        status deprecated;
+        description "Receive flow table statistics update";
+
+        uses inv:node;
+        uses flow-table-and-statistics-map;
+        uses tr:multipart-transaction-aware;
+    }
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>de.tum.ei.lkn.eces</groupId>
+  <artifactId>network</artifactId>
+  <versioning>
+    <versions>
+      <version>1.0.0-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20170516221417</lastUpdated>
+  </versioning>
+</metadata>

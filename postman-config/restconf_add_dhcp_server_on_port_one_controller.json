@@ -1,0 +1,36 @@
+{
+	"variables": [],
+	"info": {
+		"name": "netsoft-demo",
+		"_postman_id": "bb206bd8-1d85-1db4-b464-9432992cc7f0",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "add-dhcp-server-on-port",
+			"request": {
+				"url": "http://localhost:8181/restconf/operations/bootstrappingmanager-dhcp:bootstrapping-configuration-input",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic YWRtaW46YWRtaW4=",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"input\": {\n        \"dhcp-ranges\": [\n            {\n                \"dhcp-addr-range-begin\": \"10.10.0.30\",\n                \"dhcp-addr-range-end\": \"10.10.0.59\"\n}\n],\n        \"bind-dhcp-interface\": [\n            {\n                \"interface-name\": \"ens160\"\n            }\n],\n        \"controller-ip-master\": \"10.10.0.101\",\n        \"controller-ip-list-slave\": [\n],\n        \"ssh-username\": \"admin\",\n        \"ssh-password\": \"admin\"\n    }\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

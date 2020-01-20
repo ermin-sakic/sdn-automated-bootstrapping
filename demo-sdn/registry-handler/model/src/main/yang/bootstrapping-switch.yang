@@ -1,0 +1,39 @@
+module bootstrapping-switch {
+    yang-version 1;
+    namespace "urn:eu:virtuwind:registryhandler:bootstrapping";
+    prefix bootstrapping-switch;
+
+    import yang-ext {prefix ext; revision-date "2013-07-09";}
+    import ietf-yang-types { prefix yang; revision-date 2010-09-24; }
+    import opendaylight-inventory {prefix inv;revision-date "2013-08-19";}
+
+    description "Switch bootstrapping states";
+
+    revision "2018-04-17" {
+        description "Initial version.";
+    }
+
+    augment "inv:nodes/inv:node" {
+        ext:augment-identifier "switch-bootstrapping-augmentation";
+        description "For each switch in a DS we store a bootstrapping state.";
+        container switch-bootsrapping-state {
+                description "Switch bootstrapping states.";
+
+                leaf state {
+                             type enumeration {
+                                 enum UNCONFIGURED;
+                                 enum OF-SESSION-ESTABLISHED;
+                                 enum CONTROLLER-SELF-DISCOVERY-RULE-INSTALLED;
+                                 enum CONTROLLER-SELF-DISCOVERY-DONE;
+                                 enum INITIAL-OF-RULES-PHASE-I-DONE;
+                                 //enum INITIAL-OF-RULES-PHASE-II-READY;
+                                 enum INITIAL-OF-RULES-PHASE-II-DONE;
+                                 enum INTERMEDIATE-RESILIENCE-INSTALLED;
+                             }
+                             default UNCONFIGURED;
+                }
+            }
+    }
+
+
+}

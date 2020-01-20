@@ -1,0 +1,71 @@
+#######################################################################
+#       Filename: initial_OF_rules_multiple_controllers_setup.template#
+#                                                                     #
+#       Author: Mirza Avdic                                           #
+#       Date:  Apr 17, 2018                                           #
+#                                                                     #
+#######################################################################  
+
+######################################################################
+#
+#   Filename: initial_OF_rules_multiple_controllers_setup.template
+#
+#   Description: 
+#
+#   Initial OF template rules for the multiple controllers setup. 
+######################################################################
+
+# Handling Open Flow traffic
+# to controller
+# in_port also necessary because if there is a loop between switches that are in different states# it can happen that originated traffic comes back to the sourcce and in that way it will be a gain broadcasted and in that way create a storm 
+priority=10, in_port=local, eth_src=BR100_MAC, tcp, tcp_dst=6633, actions=all
+# from controller
+priority=10, eth_dst=BR100_MAC, tcp, tcp_src=6633, actions=local
+# other (when akka port not provided)
+#priority=9, tcp, tcp_dst=6633, actions=drop
+#priority=9, tcp, tcp_src=6633, actions=drop
+
+
+# Handling DHCP traffic
+# DHCP OFFER & ACK send to LOCAL initially
+priority=10, udp, udp_src=67, udp_dst=68, actions=local
+# DHCP DISCOVER & REQUEST send to NORMAL, but only messages that you have created
+priority=10, in_port=local, eth_src=BR100_MAC, udp, udp_src=68, udp_dst=67, actions=all
+# Handling SSH traffic
+# Initially match only SSH traffic generated from you and intended for you
+priority=10, in_port=local, eth_src=BR100_MAC, tcp, tcp_src=22, actions=all
+priority=10, eth_dst=BR100_MAC, tcp, tcp_dst=22, actions=local
+# Necessary in the MC scenario, otherwise it will match the last TCP rule and create an initial storm (not with specified akka port 2550 was the issue before that)
+#priority=9, tcp, tcp_src=22, actions=drop
+#priority=9, tcp, tcp_dst=22, actions=drop
+# Handling ARP traffic
+# Dummy rule for self discovery to prevent wrong discovery places
+priority=10, arp, arp_op=1, arp_tpa=10.50.0.0/24, actions=drop
+# S->C ARP 
+# ARP request
+priority=10, eth_src=BR100_MAC, arp, arp_op=1, actions=all
+# ARP reply
+priority=10, eth_dst=BR100_MAC, arp, arp_op=2, actions=local
+# C->S ARP and C->C
+# ARP request
+priority=9, arp, arp_op=1, actions=all
+#priority=9, arp, arp_op=1, actions=meter:1, normal 
+#priority=9, hard_timeout=1, arp, arp_op=1, actions=normal 
+#priority=9, hard_timeout=1, arp, arp_op=1, actions=set_queue:2, normal 
+#priority=9, arp, arp_op=1, actions=set_queue:2, normal 
+# ARP reply
+# can be priority 10 as well
+priority=9, eth_src=BR100_MAC, arp, arp_op=2, actions=all
+# C->C ARP reply 
+priority=8, arp, arp_op=2, actions=all
+#priority=8, arp, arp_op=2, actions=meter:2, normal
+#priority=8, hard_timeout=1, arp, arp_op=2, actions=normal
+#priority=8, hard_timeout=1, arp, arp_op=2, actions=set_queue:1, normal
+#priority=8, arp, arp_op=2, actions=set_queue:2, normal
+# C->C TCP
+#priority=7, hard_timeout=1, tcp, actions=normal
+priority=7, tcp, tcp_dst=2550, actions=normal
+priority=7, tcp, tcp_src=2550, actions=normal
+
+                                                     
+

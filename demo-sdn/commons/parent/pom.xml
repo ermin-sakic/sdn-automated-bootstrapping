@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <prerequisites>
+    <maven>3.2</maven>
+  </prerequisites>
+  <parent>
+    <groupId>org.opendaylight.odlparent</groupId>
+    <artifactId>odlparent</artifactId>
+    <version>1.7.2-Boron-SR2</version>
+    <relativePath></relativePath>
+  </parent>
+
+  <groupId>eu.virtuwind</groupId>
+  <artifactId>commons</artifactId>
+  <name>Common Properties</name>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <properties>
+    <nexusproxy>http://nexus.opendaylight.org/content</nexusproxy>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version.source>1.8</java.version.source>
+    <java.version.target>1.8</java.version.target>
+    <checkstyle.skip>true</checkstyle.skip>
+    <maven.javadoc.skip>true</maven.javadoc.skip>
+    <codeGeneratorPath>src/main/yang-gen-code</codeGeneratorPath>
+    <configCodeGeneratorPath>src/main/yang-gen-config</configCodeGeneratorPath>
+    <bootstrappingmanager.dhcp.configfile>150-bootstrapping-manager-dhcp.xml</bootstrappingmanager.dhcp.configfile>
+    <bootstrappingmanager.alternative.dhcp.configfile>150-bootstrapping-manager-alternative-dhcp.xml</bootstrappingmanager.alternative.dhcp.configfile>
+    <bootstrappingmanager.setup.configfile>149-bootstrapping-manager-setup.xml</bootstrappingmanager.setup.configfile>
+    <bootstrappingmanager.alternative.setup.configfile>149-bootstrapping-manager-alternative-setup.xml</bootstrappingmanager.alternative.setup.configfile>
+    <nbi.configfile>160-nbi.xml</nbi.configfile>
+
+    <referencemonitor.version>1.0.0-SNAPSHOT</referencemonitor.version>
+    <referencemonitor.configfile>001-referencemonitor-config.xml</referencemonitor.configfile>
+    <qosnegotiator.version>1.0.0-SNAPSHOT</qosnegotiator.version>
+    <qosnegotiator.configfile>002-qosnegotiator-config.xml</qosnegotiator.configfile>
+    <pathmanager.version>1.0.0-SNAPSHOT</pathmanager.version>
+    <vtnmanager.version>0.5.2-Boron-SR2</vtnmanager.version>
+    <vtnmanager.configfile>80-vtn.xml</vtnmanager.configfile>
+    <pathmanager.configfile>001-pathmanager-config.xml</pathmanager.configfile>
+    <registryhandler.version>1.0.0-SNAPSHOT</registryhandler.version>
+    <registryhandler.configfile>001-registryhandler-config.xml</registryhandler.configfile>
+    <resourcemanager.version>1.0.0-SNAPSHOT</resourcemanager.version>
+    <resourcemanager.configfile>009-resourcemanager-config.xml</resourcemanager.configfile>
+    <resourcemonitor.version>1.0.0-SNAPSHOT</resourcemonitor.version>
+    <resourcemonitor.configfile>008-resourcemonitor-config.xml</resourcemonitor.configfile>
+    <bootstrappingmanager.version>1.0.0-SNAPSHOT</bootstrappingmanager.version>
+    <bootstrappingmanager.version>1.0.0-SNAPSHOT</bootstrappingmanager.version>
+    <nbi.version>1.0.0-SNAPSHOT</nbi.version>
+    <pathmanager.version>1.0.0-SNAPSHOT</pathmanager.version>
+    <securitymanager.version>1.0.0-SNAPSHOT</securitymanager.version>
+    <securitymanager.configfile>001-securitymanager-config.xml</securitymanager.configfile>
+    <securitymanagerAdmin.configfile>001-securitymanagerAdmin-config.xml</securitymanagerAdmin.configfile>
+    <sfcmanager.version>1.0.0-SNAPSHOT</sfcmanager.version>
+    <sfcmanager.configfile>005-sfcmanager-config.xml</sfcmanager.configfile>
+    <ui.version>1.0.0-SNAPSHOT</ui.version>
+
+
+
+    <!-- Trying to port to the new versions -->
+    <!--
+    <maven-sal-api-gen-plugin.version>0.13.0-SNAPSHOT</maven-sal-api-gen-plugin.version>
+    <yang-binding.version>0.13.0-SNAPSHOT</yang-binding.version>
+    <yang-ext.version>2013.09.07.13.0-SNAPSHOT</yang-ext.version>
+    <openflowplugin.version>0.7.0-SNAPSHOT</openflowplugin.version>
+    <yangtools.version>2.0.4-SNAPSHOT</yangtools.version>
+    <yang.jmx.version>0.9.0-SNAPSHOT</yang.jmx.version>
+    -->
+
+
+    <yang-binding.version>0.9.2-Boron-SR2</yang-binding.version>
+    <maven-sal-api-gen-plugin.version>0.9.2-Boron-SR2</maven-sal-api-gen-plugin.version>
+    <yangtools.version>1.0.2-Boron-SR2</yangtools.version>
+    <openflowplugin.version>0.3.2-Boron-SR2</openflowplugin.version>
+    <yang-ext.version>2013.09.07.9.2-Boron-SR2</yang-ext.version>
+    <yang.jmx.version>0.5.2-Boron-SR2</yang.jmx.version>
+
+    <config-api.version>0.5.2-Boron-SR2</config-api.version>
+    <sal-binding.version>1.4.2-Boron-SR2</sal-binding.version>
+    <ietf-topology.version>2013.10.21.9.2-Boron-SR2</ietf-topology.version>
+    <ietf-inet-types.version>2010.09.24.9.2-Boron-SR2</ietf-inet-types.version>
+    <ietf-yang-types.version>2010.09.24.9.2-Boron-SR2</ietf-yang-types.version>
+    <controller-model.version>1.4.2-Boron-SR2</controller-model.version>
+    <netty.threadgroup.config.version>0.5.2-Boron-SR2</netty.threadgroup.config.version>
+    <l2-types-model.version>2013.08.27.9.2-Boron-SR2</l2-types-model.version>
+    <dhcp.server.netty.version>1.0.9</dhcp.server.netty.version>
+    <sal-netconf-connector.version>1.4.2-Boron-SR2</sal-netconf-connector.version>
+    <karaf.version>3.0.3</karaf.version>
+    <build.plugins.plugin.version>1.9.1</build.plugins.plugin.version>
+    <opendaylight-karaf-resources.version>1.7.2-Boron-SR2</opendaylight-karaf-resources.version>
+
+    <feature.l2switch.version>0.4.2-Boron-SR2</feature.l2switch.version>
+    <feature.sfc.version>0.3.2-Boron-SR2</feature.sfc.version>
+    <feature.dlux.version>0.4.2-Boron-SR2</feature.dlux.version>
+    <feature.aaa.version>0.4.2-Boron-SR2</feature.aaa.version>
+    <feature.netconf.connector.version>1.1.2-Boron-SR2</feature.netconf.connector.version>
+    <feature.restconf.version>1.4.2-Boron-SR2</feature.restconf.version>
+    <feature.mdsal.version>1.4.2-Boron-SR2</feature.mdsal.version>
+    <feature.openflowplugin.version>0.3.2-Boron-SR2</feature.openflowplugin.version>
+    <feature.config.netty.version>0.5.2-Boron-SR2</feature.config.netty.version>
+    <odl.thirdparty.jung2.version>2.0.1</odl.thirdparty.jung2.version>
+
+  </properties>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+            <source>${java.version.source}</source>
+            <target>${java.version.target}</target>
+            <testSource>${java.version.source}</testSource>
+            <testTarget>${java.version.target}</testTarget>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <repositories>
+    <!-- OpenDayLight Released artifact -->
+    <repository>
+      <id>opendaylight-release</id>
+      <name>opendaylight-release</name>
+      <url>http://nexus.opendaylight.org/content/repositories/opendaylight.release/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <!-- OpenDayLight Snapshot artifact -->
+    <repository>
+      <id>opendaylight-snapshot</id>
+      <name>opendaylight-snapshot</name>
+      <url>http://nexus.opendaylight.org/content/repositories/opendaylight.snapshot/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>opendaylight-release</id>
+      <name>opendaylight-release</name>
+      <url>http://nexus.opendaylight.org/content/repositories/opendaylight.release/</url>
+      <snapshots>
+          <enabled>false</enabled>
+      </snapshots>
+      <releases>
+          <enabled>true</enabled>
+      </releases>
+    </pluginRepository>
+    <pluginRepository>
+      <id>opendaylight-snapshot</id>
+      <name>opendaylight-snapshot</name>
+      <url>http://nexus.opendaylight.org/content/repositories/opendaylight.snapshot/</url>
+      <snapshots>
+          <enabled>true</enabled>
+      </snapshots>
+      <releases>
+          <enabled>false</enabled>
+      </releases>
+  </pluginRepository>
+  </pluginRepositories>
+
+  <dependencies>
+    <!-- Dependencies for the Yang and configs -->
+    <dependency>
+      <groupId>org.opendaylight.mdsal.model</groupId>
+      <artifactId>ietf-yang-types</artifactId>
+      <version>${ietf-yang-types.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.mdsal.model</groupId>
+      <artifactId>ietf-inet-types</artifactId>
+      <version>${ietf-inet-types.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.mdsal.model</groupId>
+      <artifactId>yang-ext</artifactId>
+      <version>${yang-ext.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>yang-common</artifactId>
+      <version>${yangtools.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.mdsal</groupId>
+      <artifactId>yang-binding</artifactId>
+      <version>${yang-binding.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.controller</groupId>
+      <artifactId>config-api</artifactId>
+      <version>${config-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.controller</groupId>
+      <artifactId>sal-binding-config</artifactId>
+      <version>${sal-binding.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.controller</groupId>
+      <artifactId>sal-binding-api</artifactId>
+      <version>${sal-binding.version}</version>
+    </dependency>
+  </dependencies>
+</project>

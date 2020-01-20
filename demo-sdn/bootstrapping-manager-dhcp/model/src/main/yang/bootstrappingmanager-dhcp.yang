@@ -1,0 +1,105 @@
+module bootstrappingmanager-dhcp {
+    yang-version 1;
+    namespace "urn:eu:virtuwind:bootstrappingmanager:dhcp";
+    prefix bootstrappingmanager-dhcp;
+
+    import yang-ext {prefix ext; revision-date "2013-07-09";}
+    import ietf-yang-types { prefix yang; revision-date "2010-09-24"; }
+    description "Bootstrapping Manager DHCP configuration";
+
+    revision "2016-12-10" {
+        description "Initial version.";
+    }
+
+    grouping dhcp-range {
+            leaf dhcp-addr-range-begin {
+                type string;
+            }
+
+            leaf dhcp-addr-range-end {
+                type string;
+            }
+    }
+
+    rpc bootstrapping-configuration-input {
+        input {
+                            list dhcp-ranges {
+                                uses dhcp-range;
+                            }
+
+                            list bind-dhcp-interface {
+                                 leaf interface-name {
+                                     type string;
+                                 }
+                            }
+
+                            leaf controller-ip-master {
+                               type string;
+                            }
+
+                            list controller-ip-list-slave {
+                                description "List of slave controller IPs assigned to the switch.";
+
+                                leaf ip-addr {
+                                    type string;
+                                    config true;
+                                }
+                            }
+
+                            leaf ssh-username {
+                            			type string;
+                            		}
+
+                            leaf ssh-password {
+                            			type string;
+                            		}
+                }
+
+        output {
+            leaf response {
+                type string;
+            }
+        }
+    }
+
+    rpc bootstrapping-configuration-modify {
+        input {
+                            list dhcp-ranges {
+                                uses dhcp-range;
+                            }
+
+                            list bind-dhcp-interface {
+                                 leaf interface-name {
+                                     type string;
+                                 }
+                            }
+
+                            leaf controller-ip-master {
+                               type string;
+                            }
+
+                            list controller-ip-list-slave {
+                                description "List of slave controller IPs assigned to the switch.";
+
+                                leaf ip-addr {
+                                    type string;
+                                    config true;
+                                }
+                            }
+
+                            leaf ssh-username {
+                            			type string;
+                            		}
+
+                            leaf ssh-password {
+                            			type string;
+                            		}
+        }
+
+        output {
+                    leaf response {
+                        type string;
+                    }
+                }
+    }
+}

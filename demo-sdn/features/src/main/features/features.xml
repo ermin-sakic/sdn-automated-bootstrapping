@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<features name="VirtuWind Architecture " xmlns="http://karaf.apache.org/xmlns/features/v1.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.2.0 http://karaf.apache.org/xmlns/features/v1.2.0">
+    <repository>mvn:org.opendaylight.controller/features-mdsal/${feature.mdsal.version}/xml/features</repository>
+    <repository>mvn:org.opendaylight.netconf/features-restconf/${feature.restconf.version}/xml/features</repository>
+    <repository>mvn:org.opendaylight.netconf/features-netconf-connector/${feature.netconf.connector.version}/xml/features</repository>
+    <repository>mvn:org.opendaylight.openflowplugin/features-openflowplugin/${feature.openflowplugin.version}/xml/features</repository>
+    <repository>mvn:org.opendaylight.yangtools/features-yangtools/${yangtools.version}/xml/features</repository>
+    <repository>mvn:org.opendaylight.mdsal.model/features-mdsal-model/${maven-sal-api-gen-plugin.version}/xml/features</repository>
+    <repository>mvn:org.opendaylight.dlux/features-dlux/${feature.dlux.version}/xml/features</repository>
+    <repository>mvn:org.opendaylight.l2switch/features-l2switch/${feature.l2switch.version}/xml/features</repository>
+    <repository>mvn:org.opendaylight.sfc/features-sfc/${feature.sfc.version}/xml/features</repository>
+    <repository>mvn:org.opendaylight.controller/features-config-netty/${feature.config.netty.version}/xml/features</repository>
+    <!--<repository>mvn:org.opendaylight.vtn/features-vtn-manager/${vtnmanager.version}/xml/features</repository> -->
+
+    <feature name='pathmanager-model' description='virtuwind :: pathmanager API' version='${pathmanager.version}'>
+        <bundle>mvn:eu.virtuwind/pathmanager-model/${pathmanager.version}</bundle>
+    </feature>
+    <feature name='pathmanager-impl' description='virtuwind :: path manager implementation' version='${pathmanager.version}'>
+        <!--<feature version="${feature.aaa.version}">odl-aaa-shiro</feature>-->
+        <feature version="${feature.mdsal.version}">odl-mdsal-broker</feature>
+        <feature version='${project.version}'>tum-lkn</feature>
+        <feature version="${pathmanager.version}">pathmanager-model</feature>
+        <bundle>mvn:eu.virtuwind/pathmanager-impl/${pathmanager.version}</bundle>
+        <configfile finalname="etc/opendaylight/karaf/${pathmanager.configfile}">mvn:eu.virtuwind/pathmanager-config/${pathmanager.version}/xml/config</configfile>
+    </feature>
+    <!-- Additional 3rd party bootstrapping manager dependencies-->
+    <feature name='tum-lkn' version='${project.version}'>
+	<bundle>wrap:mvn:de.tum.ei.lkn.eces/core/1.0.1-SNAPSHOT</bundle>
+        <bundle>wrap:mvn:de.tum.ei.lkn.eces/graph/1.0.0-SNAPSHOT</bundle>
+        <bundle>wrap:mvn:de.tum.ei.lkn.eces/network/1.0.0-SNAPSHOT</bundle>
+        <bundle>wrap:mvn:de.tum.ei.lkn.eces/dnm/1.0.2-SNAPSHOT</bundle>
+        <bundle>wrap:mvn:de.tum.ei.lkn.eces/routing/1.0.2-SNAPSHOT</bundle>
+        <bundle>wrap:mvn:de.tum.ei.lkn.eces/WebGraphGUI/1.0.1-SNAPSHOT</bundle>
+        <bundle>wrap:mvn:org.apache.commons/commons-lang3/3.4</bundle>
+        <bundle>wrap:mvn:org.apache.commons/commons-math3/3.6.1</bundle>
+        <bundle>wrap:mvn:de.erichseifert.gral/gral-core/0.11</bundle>
+        <bundle>wrap:mvn:io.netty/netty-all/4.0.32.Final</bundle>
+        <bundle>wrap:mvn:org.jscience/jscience/4.3.1</bundle>
+        <bundle>wrap:mvn:org.javatuples/javatuples/1.2</bundle>
+    </feature>
+
+
+    <feature name='bootstrappingmanager-dhcp-model' description='virtuwind :: Bootstrapping Manager DHCP Model API' version='${bootstrappingmanager.version}'>
+        <feature version="${maven-sal-api-gen-plugin.version}">odl-mdsal-models</feature>
+        <feature version="${feature.mdsal.version}">odl-mdsal-broker</feature>
+        <bundle>mvn:eu.virtuwind/bootstrappingmanager-dhcp-model/${bootstrappingmanager.version}</bundle>
+    </feature>
+
+    <feature name='bootstrappingmanager-dhcp-impl' description='virtuwind :: Bootstrapping Manager DHCP Implementation' version='${bootstrappingmanager.version}'>
+        <feature version="${feature.mdsal.version}">odl-mdsal-broker</feature>
+        <feature version="${bootstrappingmanager.version}">bootstrappingmanager-dhcp-model</feature>
+        <feature version="${bootstrappingmanager.version}">bootstrappingmanager-setup-impl</feature>
+        <feature version="${registryhandler.version}">registryhandler-impl</feature>
+        <feature version='${feature.config.netty.version}'>odl-config-netty</feature>
+        <feature version='${maven-sal-api-gen-plugin.version}'>odl-mdsal-models</feature>
+        <feature version='${project.version}'>anarres-dhcp-server</feature>
+        <bundle>mvn:eu.virtuwind/bootstrappingmanager-dhcp-impl/${bootstrappingmanager.version}</bundle>
+        <configfile finalname="etc/opendaylight/karaf/${bootstrappingmanager.dhcp.configfile}">mvn:eu.virtuwind/bootstrappingmanager-dhcp-config/${bootstrappingmanager.version}/xml/config</configfile>
+    </feature>
+
+    <feature name='bootstrappingmanager-setup-impl' description='virtuwind :: Bootstrapping Manager Setup Implementation' version='${bootstrappingmanager.version}'>
+        <feature version="${feature.openflowplugin.version}">odl-openflowplugin-southbound</feature>
+        <feature version="${feature.openflowplugin.version}">odl-openflowplugin-flow-services</feature>
+        <feature version="${feature.l2switch.version}">odl-l2switch-hosttracker</feature>
+        <feature version="${feature.l2switch.version}">odl-l2switch-arphandler</feature>
+        <feature version="${feature.mdsal.version}">odl-mdsal-broker</feature>
+        <feature version='${project.version}'>jsch</feature>
+        <bundle>mvn:eu.virtuwind/bootstrappingmanager-setup-impl/${bootstrappingmanager.version}</bundle>
+        <configfile finalname="etc/opendaylight/karaf/${bootstrappingmanager.setup.configfile}">mvn:eu.virtuwind/bootstrappingmanager-setup-config/${bootstrappingmanager.version}/xml/config</configfile>
+    </feature>
+
+    <!-- Alternative approach features -->
+    <feature name='bootstrappingmanager-alternative-dhcp-model' description='virtuwind :: Bootstrapping Manager Alternative DHCP Model API' version='${bootstrappingmanager.version}'>
+        <feature version="${maven-sal-api-gen-plugin.version}">odl-mdsal-models</feature>
+        <feature version="${feature.mdsal.version}">odl-mdsal-broker</feature>
+        <bundle>mvn:eu.virtuwind/bootstrappingmanager-alternative-dhcp-model/${bootstrappingmanager.version}</bundle>
+    </feature>
+
+    <feature name='bootstrappingmanager-alternative-dhcp-impl' description='virtuwind :: Bootstrapping Manager Alternative DHCP Implementation' version='${bootstrappingmanager.version}'>
+        <feature version="${feature.mdsal.version}">odl-mdsal-broker</feature>
+        <feature version="${bootstrappingmanager.version}">bootstrappingmanager-alternative-dhcp-model</feature>
+        <feature version="${bootstrappingmanager.version}">bootstrappingmanager-alternative-setup-impl</feature>
+        <feature version="${registryhandler.version}">registryhandler-impl</feature>
+        <feature version='${feature.config.netty.version}'>odl-config-netty</feature>
+        <feature version='${maven-sal-api-gen-plugin.version}'>odl-mdsal-models</feature>
+        <feature version='${project.version}'>anarres-dhcp-server</feature>
+        <bundle>mvn:eu.virtuwind/bootstrappingmanager-alternative-dhcp-impl/${bootstrappingmanager.version}</bundle>
+        <configfile finalname="etc/opendaylight/karaf/${bootstrappingmanager.alternative.dhcp.configfile}">mvn:eu.virtuwind/bootstrappingmanager-alternative-dhcp-config/${bootstrappingmanager.version}/xml/config</configfile>
+    </feature>
+
+    <feature name='bootstrappingmanager-alternative-setup-impl' description='virtuwind :: Bootstrapping Manager Alternative Setup Implementation' version='${bootstrappingmanager.version}'>
+        <feature version="${feature.openflowplugin.version}">odl-openflowplugin-southbound</feature>
+        <feature version="${feature.openflowplugin.version}">odl-openflowplugin-flow-services</feature>
+        <feature version="${feature.l2switch.version}">odl-l2switch-hosttracker</feature>
+        <feature version="${feature.l2switch.version}">odl-l2switch-arphandler</feature>
+        <feature version="${feature.mdsal.version}">odl-mdsal-broker</feature>
+        <feature version='${project.version}'>jsch</feature>
+        <bundle>mvn:eu.virtuwind/bootstrappingmanager-alternative-setup-impl/${bootstrappingmanager.version}</bundle>
+        <configfile finalname="etc/opendaylight/karaf/${bootstrappingmanager.alternative.setup.configfile}">mvn:eu.virtuwind/bootstrappingmanager-alternative-setup-config/${bootstrappingmanager.version}/xml/config</configfile>
+    </feature>
+
+    <!-- -->
+
+    <!-- Additional 3rd party bootstrapping manager dependencies-->
+    <feature name='anarres-dhcp-server' version='${project.version}'>
+        <bundle>wrap:mvn:org.anarres.dhcp/dhcp-server-netty/1.0.9</bundle>
+        <bundle>wrap:mvn:org.anarres.dhcp/dhcp-protocol/1.0.9</bundle>
+        <bundle>wrap:mvn:org.anarres.jallocator/jallocator/1.0.2</bundle>
+    </feature>
+    <feature name='jsch' version='${project.version}'>
+        <bundle>wrap:mvn:com.jcraft/jsch/0.1.54</bundle>
+    </feature>
+    <!-- END-->
+    <feature name='registryhandler-model' description='virtuwind :: registryhandler API' version='${registryhandler.version}'>
+        <feature version="${maven-sal-api-gen-plugin.version}">odl-mdsal-models</feature>
+        <bundle>mvn:eu.virtuwind/registryhandler-model/${registryhandler.version}</bundle>
+    </feature>
+
+    <feature name='registryhandler-impl' description='virtuwind :: registryhandler Implementation' version='${registryhandler.version}'>
+        <feature version="${feature.mdsal.version}">odl-mdsal-broker</feature>
+        <feature version="${registryhandler.version}">registryhandler-model</feature>
+        <bundle>mvn:eu.virtuwind/registryhandler-impl/${registryhandler.version}</bundle>
+        <configfile finalname="etc/opendaylight/karaf/${registryhandler.configfile}">mvn:eu.virtuwind/registryhandler-config/${registryhandler.version}/xml/config</configfile>
+    </feature>
+
+    <feature name='resourcemonitor-model' description='virtuwind :: resourcemonitor API' version='${resourcemonitor.version}'>
+        <feature version="${maven-sal-api-gen-plugin.version}">odl-mdsal-models</feature>
+        <bundle>mvn:eu.virtuwind/resourcemonitor-model/${resourcemonitor.version}</bundle>
+    </feature>
+
+    <feature name='resourcemonitor-impl' description='virtuwind :: resourcemonitor Implementation' version='${resourcemonitor.version}'>
+        <feature version="${feature.mdsal.version}">odl-mdsal-broker</feature>
+        <feature version="${resourcemonitor.version}">resourcemonitor-model</feature>
+        <bundle>mvn:eu.virtuwind/resourcemonitor-impl/${resourcemonitor.version}</bundle>
+        <configfile finalname="etc/opendaylight/karaf/${resourcemonitor.configfile}">mvn:eu.virtuwind/resourcemonitor-config/${resourcemonitor.version}/xml/config</configfile>
+    </feature>
+
+
+    <feature name='nbi-model' description='virtuwind :: nbi API' version='${nbi.version}'>
+        <feature version="${maven-sal-api-gen-plugin.version}">odl-mdsal-models</feature>
+        <bundle>mvn:eu.virtuwind/nbi-model/${nbi.version}</bundle>
+    </feature>
+
+    <feature name='nbi-impl' description='virtuwind :: nbi Implementation' version='${nbi.version}'>
+        <feature version="${feature.mdsal.version}">odl-mdsal-broker</feature>
+        <feature version="${nbi.version}">nbi-model</feature>
+        <bundle>mvn:eu.virtuwind/nbi-impl/${nbi.version}</bundle>
+        <configfile finalname="etc/opendaylight/karaf/${nbi.configfile}">mvn:eu.virtuwind/nbi-config/${nbi.version}/xml/config</configfile>
+    </feature>
+
+    <feature name='resourcemanager-model' description='virtuwind :: resourcemanager API' version='${resourcemanager.version}'>
+        <feature version="${maven-sal-api-gen-plugin.version}">odl-mdsal-models</feature>
+        <bundle>mvn:eu.virtuwind/resourcemanager-model/${resourcemanager.version}</bundle>
+    </feature>
+
+    <feature name='resourcemanager-impl' description='virtuwind :: resourcemanager Implementation' version='${resourcemanager.version}'>
+        <feature version="${feature.mdsal.version}">odl-mdsal-broker</feature>
+        <feature version="${resourcemanager.version}">resourcemanager-model</feature>
+        <bundle>mvn:eu.virtuwind/resourcemanager-impl/${resourcemanager.version}</bundle>
+        <configfile finalname="etc/opendaylight/karaf/${resourcemanager.configfile}">mvn:eu.virtuwind/resourcemanager-config/${resourcemanager.version}/xml/config</configfile>
+    </feature>
+
+
+    <feature name='virtuwind-features-intra' version='${project.version}' description='virtuwind :: intra-domain features'>
+        <feature version="${bootstrappingmanager.version}">bootstrappingmanager-dhcp-impl</feature>
+        <feature version="${bootstrappingmanager.version}">bootstrappingmanager-setup-impl</feature>
+        <feature version="${pathmanager.version}">pathmanager-impl</feature>
+        <feature version="${registryhandler.version}">registryhandler-impl</feature>
+        <feature version="${feature.restconf.version}">odl-restconf-all</feature>
+        <feature version="${resourcemonitor.version}">resourcemonitor-impl</feature>
+        <feature version="${resourcemanager.version}">resourcemanager-impl</feature>
+        <feature version="${nbi.version}">nbi-impl</feature>
+        <feature version="${feature.restconf.version}">odl-restconf-all</feature>
+    </feature>
+
+    <!-- Alternative approach features -->
+
+    <feature name='virtuwind-features-intra-alternative' version='${project.version}' description='virtuwind :: intra-domain alternative features'>
+        <feature version="${bootstrappingmanager.version}">bootstrappingmanager-alternative-dhcp-impl</feature>
+        <feature version="${bootstrappingmanager.version}">bootstrappingmanager-alternative-setup-impl</feature>
+        <feature version="${pathmanager.version}">pathmanager-impl</feature>
+        <feature version="${registryhandler.version}">registryhandler-impl</feature>
+        <feature version="${feature.restconf.version}">odl-restconf-all</feature>
+        <feature version="${resourcemonitor.version}">resourcemonitor-impl</feature>
+        <feature version="${resourcemanager.version}">resourcemanager-impl</feature>
+        <feature version="${nbi.version}">nbi-impl</feature>
+        <feature version="${feature.restconf.version}">odl-restconf-all</feature>
+    </feature>
+
+    <!-- -->
+
+    <feature name="virtuwind-ui" version='${project.version}' description="virtuwind :: UI">
+        <feature version="${feature.dlux.version}">odl-dlux-all</feature>
+        <feature version="${feature.restconf.version}">odl-restconf</feature>
+        <feature version="${feature.restconf.version}">odl-mdsal-apidocs</feature>
+    </feature>
+
+    <feature name='virtuwind-intra' version='${project.version}' description='virtuwind :: intra-domain'>
+        <feature version="${project.version}">virtuwind-features-intra</feature>
+        <feature version="${project.version}">virtuwind-ui</feature>
+    </feature>
+
+    <!-- Alternative approach features -->
+    <feature name='virtuwind-intra-alternative' version='${project.version}' description='virtuwind :: intra-domain alternative'>
+        <feature version="${project.version}">virtuwind-features-intra-alternative</feature>
+        <feature version="${project.version}">virtuwind-ui</feature>
+    </feature>
+    <!-- -->
+
+    <feature name='virtuwind-all' version='${project.version}' description='virtuwind :: All'>
+        <feature version="${project.version}">virtuwind-dlux</feature>
+     </feature>
+</features>

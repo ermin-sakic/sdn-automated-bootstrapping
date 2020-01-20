@@ -1,0 +1,57 @@
+module resourcemanager-impl {
+    yang-version 1;
+    namespace "urn:eu:virtuwind:resourcemanager:impl";
+    prefix "resourcemanager-impl";
+
+    import config { prefix config; revision-date 2013-04-05; }
+    import opendaylight-md-sal-binding { prefix mdsal; revision-date 2013-10-28; }
+
+    description
+        "This module contains the base YANG definitions for resourcemanager-impl.";
+
+    revision "2016-10-17" {
+        description
+            "First version of Resource Monitor module. Cycle 1.";
+    }
+
+    // This is the definition of the service implementation as a module identity
+    identity resourcemanager-impl {
+            base config:module-type;
+
+            // Specifies the prefix for generated java classes.
+            config:java-name-prefix resourcemanager;
+    }
+
+    // Augments the 'configuration' choice node under modules/module
+    augment "/config:modules/config:module/config:configuration" {
+        case resourcemanager-impl {
+            when "/config:modules/config:module/config:type = 'resourcemanager-impl'";
+
+            //wires in the data-broker service
+            container data-broker {
+                uses config:service-ref {
+                    refine type {
+                        mandatory true;
+                        config:required-identity mdsal:binding-async-data-broker;
+                    }
+                }
+            }
+            container notification-service {
+                uses config:service-ref {
+                  refine type {
+                    mandatory false;
+                    config:required-identity mdsal:binding-notification-service;
+                  }
+               }
+            }
+            container rpc-registry {
+                uses config:service-ref {
+                    refine type {
+                        mandatory true;
+                        config:required-identity mdsal:binding-rpc-registry;
+                    }
+                }
+            }
+        }
+    }
+}

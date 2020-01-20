@@ -1,0 +1,76 @@
+module bootstrapping {
+    yang-version 1;
+    namespace "urn:eu:virtuwind:registryhandler:bootstrapping";
+    prefix bootstrapping;
+
+    import yang-ext {prefix ext; revision-date "2013-07-09";}
+    import ietf-yang-types { prefix yang; revision-date 2010-09-24; }
+
+    description "Bootstrapping Manager configuration";
+
+    revision "2016-10-17" {
+        description "Initial version.";
+    }
+
+    grouping dhcp-range {
+            leaf dhcp-addr-range-begin {
+                type string;
+            }
+
+            leaf dhcp-addr-range-end {
+                type string;
+            }
+    }
+
+    container bootstrapping-datastore {
+        description "List of configured bootstrapping parameters ";
+
+        list dhcp-addr-range {
+           uses dhcp-range;
+        }
+
+       list bind-dhcp-interface {
+            leaf interface-name {
+                type string;
+            }
+       }
+
+        leaf controller-ip-master {
+           type string;
+        }
+
+        list controller-ip-list-slave {
+            description "List of slave controller IPs assigned to the switch.";
+
+            leaf ip-addr {
+                type string;
+                config true;
+            }
+        }
+
+        list dhcp-ranges {
+            uses dhcp-range;
+        }
+
+		leaf ssh-username {
+			type string;
+		}
+	
+		leaf ssh-password {
+			type string;
+		}
+    }
+
+    container bootstrapping-status {
+        description "Status of configuration steps (for consistency)";
+
+        leaf current-status {
+                     type enumeration {
+                         enum dhcp-server-startd;
+                         enum initial-of-config-done;
+                         enum prepare-controller-discovery;
+                         enum reembedding-finished;
+                     }
+        }
+    }
+}

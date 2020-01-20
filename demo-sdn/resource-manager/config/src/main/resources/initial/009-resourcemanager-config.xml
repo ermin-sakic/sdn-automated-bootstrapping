@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<snapshot>
+  <configuration>
+    <data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+      <modules xmlns="urn:opendaylight:params:xml:ns:yang:controller:config">
+        <module>
+          <type
+              xmlns:prefix="urn:eu:virtuwind:resourcemanager:impl">prefix:resourcemanager-impl</type>
+          <name>resourcemanager-impl</name>
+
+          <notification-service>
+            <type xmlns:binding="urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding">binding:binding-notification-service</type>
+            <name>binding-notification-broker</name>
+          </notification-service>
+          <data-broker>
+            <type xmlns:binding="urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding">binding:binding-async-data-broker</type>
+            <name>binding-data-broker</name>
+          </data-broker>
+          <rpc-registry>
+            <type xmlns:binding="urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding">binding:binding-rpc-registry</type>
+            <name>binding-rpc-broker</name>
+          </rpc-registry>
+        </module>
+      </modules>
+    </data>
+  </configuration>
+
+  <required-capabilities>
+    <capability>urn:eu:virtuwind:resourcemanager:impl?module=resourcemanager-impl&amp;revision=2016-10-17</capability>
+  </required-capabilities>
+</snapshot>

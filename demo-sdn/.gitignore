@@ -1,0 +1,37 @@
+# Eclipse
+.classpath
+.project
+.checkstyle
+.settings/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+target/
+*~
+*.MF
+
+# ODL
+yang-gen-code/
+yang-gen-config/
+*.log
+bin/
+dist/
+logs/
+*.MF
+*/MANIFEST.MF
+
+# Package Files #
+*.jar
+
+# Integration build
+gitlab-ci.yml
+
+# Generated configs
+

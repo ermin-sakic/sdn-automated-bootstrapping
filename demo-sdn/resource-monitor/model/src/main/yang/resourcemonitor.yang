@@ -1,0 +1,11 @@
+module resourcemonitor {
+    yang-version 1;
+    namespace "urn:eu:virtuwind:resourcemonitor";
+    prefix resourcemonitor;
+
+    description "Resource Manager configuration";
+
+    revision "2016-10-17" {
+        description "Initial version of resourcemonitor interfaces";
+    }
+}

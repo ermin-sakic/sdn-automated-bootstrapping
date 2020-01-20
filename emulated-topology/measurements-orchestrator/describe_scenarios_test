@@ -1,0 +1,6 @@
+scenario99, grid3x3, STANDARD, LOCAL, 1, (1)
+scenario98, grid3x3, ALTERNATIVE, LOCAL, 1, (1)
+scenario97, grid3x3, ALTERNATIVE, REMOTE, 3, (1 5 9)
+scenario96, grid3x3, STANDARD, REMOTE, 3, (1 5 9)
+scenario95, grid2x2, STANDARD, REMOTE, 3, (1 2 3)
+scenario94, one-ring-bottleneck7, STANDARD, REMOTE, 3, (1 2 3)

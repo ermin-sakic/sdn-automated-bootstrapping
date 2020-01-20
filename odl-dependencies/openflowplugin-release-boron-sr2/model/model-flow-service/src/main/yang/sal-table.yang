@@ -1,0 +1,50 @@
+module sal-table {
+    namespace "urn:opendaylight:table:service";
+    prefix table;
+
+    import opendaylight-inventory {prefix inv;revision-date "2013-08-19";}
+    import opendaylight-table-types {prefix table-type;revision-date "2013-10-26";}
+    import flow-capable-transaction {prefix tr; revision-date "2015-03-04";}
+
+    description "Openflow table management.";
+
+    revision "2013-10-26" {
+        description "Initial revision of table service";
+    }
+    
+    grouping table-update {
+        description "Openflow table configuration structure suitable for rpc (contains node-context-ref)";
+
+        uses "inv:node-context-ref";
+        container original-table {
+            uses table-type:table-features;
+        }
+        container updated-table {
+            uses table-type:table-features;
+        }
+    }
+    
+    rpc update-table {
+        description "Configuring openflow table.";
+        
+        input {
+            uses tr:transaction-metadata;
+            leaf table-ref {
+                    type table-type:table-ref;
+            }
+            uses table-update;
+            uses tr:transaction-aware;
+        }
+        output {
+            uses tr:transaction-aware;
+        }
+    }
+    
+    notification table-updated {
+        status deprecated;
+
+        uses "inv:node-context-ref";
+        uses tr:multipart-transaction-aware;
+        uses table-type:table-features;
+    }
+}

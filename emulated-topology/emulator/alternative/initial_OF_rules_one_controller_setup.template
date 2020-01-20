@@ -1,0 +1,48 @@
+######################################################################
+#       Filename: initial_OF_rules_one_controller_setup.template     #
+#                                                                    #
+#       Author: Mirza Avdic                                          #
+#       Date:  Apr 17, 2018                                          #
+#                                                                    #
+######################################################################  
+
+######################################################################
+#
+#   Filename: initial_OF_rules_one_controller_setup.template
+#
+#   Description: 
+#
+#   Initial OF template rules for the one controller setup 
+######################################################################
+
+# Handling Open Flow traffic
+# to controller
+priority=10, in_port=local, eth_src=BR100_MAC, tcp, tcp_dst=6633, actions=all
+# from controller
+priority=10, eth_dst=BR100_MAC, tcp, tcp_src=6633, actions=local
+
+# Handling DHCP traffic
+# DHCP OFFER & ACK send to LOCAL initially
+priority=10, udp, udp_src=67, udp_dst=68, actions=local
+# DHCP DISCOVER & REQUEST send to NORMAL, but only messages that you have created
+priority=10, in_port=local, eth_src=BR100_MAC, udp, udp_src=68, udp_dst=67, actions=all
+# Handling SSH traffic
+# Initially match only SSH traffic generated from you and intended for you
+priority=10, in_port=local, eth_src=BR100_MAC, tcp, tcp_src=22, actions=all
+priority=10, eth_dst=BR100_MAC, tcp, tcp_dst=22, actions=local
+# Handling ARP traffic
+# S->C ARP 
+# ARP request
+priority=10, eth_src=BR100_MAC, arp, arp_op=1, actions=all
+# ARP reply
+priority=10, eth_dst=BR100_MAC, arp, arp_op=2, actions=local 
+# C->S ARP
+# ARP request
+priority=9, arp, arp_op=1, actions=local 
+# ARP reply
+priority=9, eth_src=BR100_MAC, arp, arp_op=2, actions=all
+# C->C ARP 
+# Later probably broadcasting Metering, timeouts, ...
+# but in the other template file
+
+

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>de.tum.ei.lkn.eces</groupId>
+  <artifactId>dnm</artifactId>
+  <version>1.0.2-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20170518.103756</timestamp>
+      <buildNumber>1</buildNumber>
+    </snapshot>
+    <lastUpdated>20170518103756</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>1.0.2-20170518.103756-1</value>
+        <updated>20170518103756</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>1.0.2-20170518.103756-1</value>
+        <updated>20170518103756</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>

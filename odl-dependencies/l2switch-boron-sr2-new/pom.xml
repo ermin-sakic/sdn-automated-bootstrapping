@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.opendaylight.l2switch</groupId>
+  <artifactId>l2switch</artifactId>
+  <version>0.4.2-Boron-SR2</version>
+  <packaging>pom</packaging>
+  <name>l2switch</name> <!-- Used by Sonar to set project name -->
+  <prerequisites>
+    <maven>3.0</maven>
+  </prerequisites>
+  <modules>
+    <module>parent</module>
+    <module>packethandler</module>
+    <module>loopremover</module>
+    <module>arphandler</module>
+    <module>addresstracker</module>
+    <module>hosttracker</module>
+    <module>l2switch-main</module>
+    <module>distribution/karaf</module>
+    <module>features</module>
+    <module>artifacts</module>
+  </modules>
+  <scm>
+    <connection>scm:git:ssh://git.opendaylight.org:29418/l2switch.git</connection>
+    <developerConnection>scm:git:ssh://git.opendaylight.org:29418/l2switch.git</developerConnection>
+    <tag>HEAD</tag>
+    <url>https://wiki.opendaylight.org/view/L2_Switch:Main</url>
+  </scm>
+  <distributionManagement>
+    <!-- OpenDayLight Released artifact -->
+    <repository>
+      <id>opendaylight-release</id>
+      <url>${nexusproxy}/repositories/opendaylight.release/</url>
+    </repository>
+    <!-- OpenDayLight Snapshot artifact -->
+    <snapshotRepository>
+      <id>opendaylight-snapshot</id>
+      <url>${nexusproxy}/repositories/opendaylight.snapshot/</url>
+    </snapshotRepository>
+    <site>
+      <id>${project.artifactId}-site</id>
+      <url>./</url>
+    </site>
+  </distributionManagement>
+</project>

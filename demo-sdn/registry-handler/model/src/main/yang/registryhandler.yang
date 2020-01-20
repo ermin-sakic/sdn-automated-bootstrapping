@@ -1,0 +1,128 @@
+module registry-handler {
+    yang-version 1;
+    namespace "urn:eu:virtuwind:registryhandler";
+    prefix registryhandler;
+
+    import yang-ext {prefix ext; revision-date "2013-07-09";}
+    import ietf-yang-types { prefix yang; revision-date 2010-09-24; }
+    description "Registry Handler configuration";
+
+    revision "2016-10-17" {
+        description "Initial version.";
+    }
+
+    container generic-kv-store {
+        description "List of key/value entries";
+
+        list kv-pair {
+            description "List of key/value pairs.";
+
+            key "kv-key";
+
+            leaf kv-key {
+                type string;
+                config true;
+                description "Uniquely identifies a key/value pair.";
+            }
+
+            leaf kv-value {
+                type string;
+                config true;
+                description "Key/value pair value.";
+            }
+        }
+    }
+
+    rpc test-generic-kv-input {
+        input {
+            leaf key {
+                type string;
+            }
+
+            leaf value {
+                type string;
+            }
+        }
+
+
+        output {
+            leaf response {
+                type string;
+            }
+        }
+
+    }
+
+    rpc test-generic-kv-removal {
+        input {
+            leaf key {
+                type string;
+            }
+        }
+
+
+        output {
+            leaf response {
+                type string;
+            }
+        }
+    }
+
+    rpc test-generic-kv-modify {
+            input {
+                leaf key {
+                    type string;
+                }
+
+                leaf value {
+                     type string;
+                }
+            }
+
+            output {
+                leaf response {
+                    type string;
+                }
+            }
+    }
+
+    container examplary-path-manager-store {
+            description "List of edge/cost entries";
+
+            list edge-cost-pair {
+                description "List of key/value pairs.";
+
+                key "edge-id";
+
+                leaf edge-id {
+                    type string;
+                    config true;
+                    description "Uniquely identifies an edge - e.g. a queue ID.";
+                }
+
+                leaf flow-rate {
+                    type int32;
+                    config true;
+                    description "Summed up arrival rate for the edge.";
+                }
+
+                leaf burst-rate {
+                    type int32;
+                    config true;
+                    description "Summed up arrival rate for the edge.";
+                }
+
+                leaf backlog {
+                    type int32;
+                    config true;
+                    description "Current worst-case backlog for the edge.";
+                }
+
+                leaf number-flows {
+                    type int32;
+                    config true;
+                    description "Number of flows mapped to edge.";
+                }
+            }
+        }
+}

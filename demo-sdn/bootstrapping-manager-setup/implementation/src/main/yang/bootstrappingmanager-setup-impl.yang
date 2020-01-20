@@ -1,0 +1,172 @@
+module bootstrappingmanager-setup-impl {
+    yang-version 1;
+    namespace "urn:eu:virtuwind:bootstrappingmanager:setup:impl";
+    prefix "bootstrappingmanager-setup-impl";
+
+    import config { prefix config; revision-date 2013-04-05; }
+    import opendaylight-md-sal-binding { prefix mdsal; revision-date 2013-10-28; }
+    import opendaylight-entity-ownership-service { prefix eos; revision-date 2015-08-10; }
+
+    description
+        "This module contains the base YANG definitions for bootstrappingmanager-setup-impl.";
+
+    revision "2015-07-22" {
+        description
+            "Initial revision.";
+    }
+
+    // This is the definition of the service implementation as a module identity
+    identity setup-impl {
+            base config:module-type;
+
+            // Specifies the prefix for generated java classes.
+            config:java-name-prefix setup;
+    }
+
+    // Augments the 'configuration' choice node under modules/module
+    augment "/config:modules/config:module/config:configuration" {
+        case setup-impl {
+            when "/config:modules/config:module/config:type = 'setup-impl'";
+
+            //wires in the data-broker service
+            container data-broker {
+                uses config:service-ref {
+                    refine type {
+                        mandatory true;
+                        config:required-identity mdsal:binding-async-data-broker;
+                    }
+                }
+            }
+
+            container entity-ownership-service {
+                uses config:service-ref {
+                    refine type {
+                        mandatory true;
+                        config:required-identity eos:entity-ownership-service;
+                    }
+                }
+            }
+
+            container notification-service {
+                uses config:service-ref {
+                  refine type {
+                    mandatory false;
+                    config:required-identity mdsal:binding-notification-service;
+                  }
+               }
+            }
+
+            container rpc-registry {
+                uses config:service-ref {
+                    refine type {
+                        mandatory true;
+                        config:required-identity mdsal:binding-rpc-registry;
+                    }
+                }
+            }
+
+            // Used by Initial Flow Writer
+            leaf dropall-flow-table-id {
+                type uint8;
+                default 0;
+            }
+            leaf dropall-flow-priority {
+                type uint16;
+                default 0;
+            }
+            leaf dropall-flow-hard-timeout {
+                type uint16;
+                default 0;
+            }
+            leaf dropall-flow-idle-timeout {
+                type uint16;
+                default 0;
+            }
+
+            // Alternative SSH Configuration
+            leaf ssh-username{
+                type string;
+                default "admin";
+            }
+            leaf ssh-password{
+                type string;
+                default "admin";
+            }
+
+            leaf controller-ip-1 {
+                type string;
+                //default "10.10.0.101";
+            }
+            leaf controller-ip-2 {
+                type string;
+                //default "10.10.0.102";
+
+            }
+            leaf controller-ip-3 {
+                type string;
+                //default "10.10.0.103";
+            }
+
+            leaf arping-path {
+                type string;
+                default "/home/ermin/run_arping.sh";
+            }
+
+            leaf cp-prefix {
+                type string;
+                default "10.10.0.0/24";
+            }
+
+            leaf bridge-name {
+                type string;
+                default "br100";
+            }
+
+            leaf env-name {
+                type string;
+                default "local";
+             }
+
+            leaf ipv6-enabled {
+                type boolean;
+                default false;
+             }
+
+            leaf arping-discovery-prefix {
+                type string;
+                default "10.50.0.0/24";
+             }
+
+             leaf rstp-used {
+                 type boolean;
+                 default true;
+             }
+
+             // FlowReconfigurator
+             leaf flow-reconfigurator {
+                 description
+                    "ONE-DISJOINT-PATH-FOR-EACH-CONTROLLER -> Rohringer thesis
+                     TWO-DISJOINT-PATHS-FOR-EACH-CONTROLLER -> Avdic thesis";
+                 type string;
+                 default "TWO-DISJOINT-PATHS-FOR-EACH-CONTROLLER";
+             }
+
+             leaf wait-before-disable-stp {
+                 type uint32;
+                 default 65;
+             }
+
+             leaf network-extension-enabled {
+                type boolean;
+                default true;
+             }
+
+             leaf icmp-enabled {
+                type boolean;
+                default false;
+             }
+
+
+        }
+    }
+}
