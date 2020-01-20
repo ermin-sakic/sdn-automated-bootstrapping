@@ -10,11 +10,22 @@ By default, the provided configurations implement the HHC approach (no reliance 
 
 
 ## Directory Explanations
-*sdn-demo*: Holds the core controller code for building of the ODL distribution.
-*emulated-topolgoy*: Orchestrates the network emulation for easy setup of all topologies described in the paper. 3x3 grid is selected as default. The accompanying config file allows for topology selection, modifications to controller(s) placement, and local / remote emulation. 
-*odl-dependencies*: Contains the modified accompanying modules, used in OpenFlow interactions, host / controller topology discovery etc. The implementation of this differs slightly from same-named off-the-shelf ODL modules.
+- *sdn-demo*: Holds the core controller code for building of the ODL distribution.
+
+- *emulated-topolgoy*: Orchestrates the network emulation for easy setup of all topologies described in the paper. 3x3 grid is selected as default. The accompanying config file allows for topology selection, modifications to controller(s) placement, and local / remote emulation. 
+
+- *odl-dependencies*: Contains the modified accompanying modules, used in OpenFlow interactions, host / controller topology discovery etc. The implementation of this differs slightly from same-named off-the-shelf ODL modules (details provided in the paper).
 
 ---
+
+## Design
+
+Overview of the two approaches for bootstrapping of in-band control networks:
+[![HSW Bootstrapping Design (relies on RSTP support in data plane)](figures/hsw_seq.png)]()
+
+[![HHC Iterative Bootstrapping Design (no RSTP requirement)](figures/hhc_seq.png)]()
+
+Details are presented in attached publication.
 
 ## Usage
 
@@ -29,10 +40,10 @@ By default, the provided configurations implement the HHC approach (no reliance 
 - Evaluation / Measurement [optional]: Python3 & PyPlot/Matplotlib
 
 ### Build Guide:
-- Build the customized openflowplugin, odl-l2switch and openflowjava components using ```build.sh``` in the corresponding sub-directories of ```odl-dependencies```
-- Build the ```emulated-topology``` (see ```bash README.md``` inside for further instructions)
+- Build the customized openflowplugin, odl-l2switch and openflowjava components using ```build.sh``` in the corresponding sub-directories of ```odl-dependencies```.
+- Build the ```emulated-topology``` (ref. contained ```bash README.md``` for further instructions)
 - Copy the ```run_arping.sh``` script to your chosen location and update the path to script correspondingly in ```demo_sdn/configure_arping_local_remote.sh```
-- Build the ```bash demo-sdn``` using the build script inside (see README.md inside for further information)
+- Build the ```bash demo-sdn``` using the ```build.sh``` script inside (ref. contained ```bash README.md``` for further information)
 
 ### Runtime:
 - Run the ```bash emulate_network.sh``` script in ```emulated-topology```
