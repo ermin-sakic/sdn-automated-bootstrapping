@@ -1,0 +1,57 @@
+# Eclipse
+.classpath
+.project
+.checkstyle
+.settings/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+target/
+*~
+*.MF
+
+# ODL
+yang-gen-code/
+yang-gen-config/
+*.log
+bin/
+dist/
+logs/
+*.MF
+
+# Package Files #
+*.jar
+
+# Integration build
+gitlab-ci.yml
+
+# My noted
+NOTES.txt
+*nohup.out
+initial_OF_rules_one_controller_setup
+initial_OF_rules_multiple_controllers_setup
+*.swp
+/VirtuWind-Network-Emulator/measurements-orchestrator/log
+/VirtuWind-Network-Emulator/measurements-orchestrator/measurement-records-processed/
+/VirtuWind-Network-Emulator/measurements-orchestrator/measurement-records-processed-absolute/
+/VirtuWind-Network-Emulator/measurements-orchestrator/measurement-records-processed-relative/
+/VirtuWind-Network-Emulator/measurements-orchestrator/measurement-records-raw*
+/VirtuWind-Network-Emulator/emulator/utility-scripts/measurements/*
+/VirtuWind-Network-Emulator/measurements-orchestrator/measurement-records-processed-backup*
+/VirtuWind-Network-Emulator/measurements-orchestrator/measurement-records-processed-absolute-backup*
+/VirtuWind-Network-Emulator/measurements-orchestrator/measurement-records-processed-relative-backup*
+*.pyc
+test.py
+/VirtuWind-Network-Emulator/measurements-orchestrator/configs/conf*
+/VirtuWind-Network-Emulator/measurements-orchestrator/scenarios/scenario*
+/VirtuWind-Network-Emulator/measurements-orchestrator/Plots/*
+
+log
+ovs/
