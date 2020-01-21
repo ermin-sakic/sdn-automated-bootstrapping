@@ -36,11 +36,13 @@ Details on both designs are presented in the attached ACM SOSR publication.
 - Maven
 
 ### Integration tools:
+- arping
 - openvswitch-switch
 - Postman (Google-Chrome App)
 - Evaluation / Measurement [optional]: Python3 & PyPlot/Matplotlib
 
 ### Build Guide:
+- In order to resolve the OpenDaylight artifacts, first edit your ```~/.m2/settings.xml``` as per https://wiki.opendaylight.org/view/GettingStarted:Development_Environment_Setup
 - Build the customized openflowplugin, odl-l2switch and openflowjava components using ```build.sh``` in the corresponding sub-directories of ```odl-dependencies```.
 - Build the ```emulated-topology``` (ref. contained ```README.md``` for further instructions)
 - Copy the ```run_arping.sh``` script to your chosen location and update the path to script correspondingly in ```demo_sdn/configure_arping_local_remote.sh```
@@ -55,9 +57,9 @@ Details on both designs are presented in the attached ACM SOSR publication.
 
 - In ODL's DLUX GUI:
 
-| 3x3 Grid (1C) | 
-|------------|
-| <img src="figures/3x3_grid.png" width="350"> |
+| 3x3 Grid (1C) | 5x5 Grid (1C) | 6x6 Grid (1C) |
+|------------|------------|------------|
+| <img src="figures/3x3_grid.png" width="350"> | <img src="figures/5x5_grid.png" width="350"> | <img src="figures/6x6_grid.png" width="350"> |
 
 
 ---
