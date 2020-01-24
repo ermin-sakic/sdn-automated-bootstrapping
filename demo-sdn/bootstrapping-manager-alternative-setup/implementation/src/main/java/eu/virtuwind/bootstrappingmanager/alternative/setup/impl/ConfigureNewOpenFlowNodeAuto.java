@@ -242,7 +242,7 @@ public class ConfigureNewOpenFlowNodeAuto implements Runnable {
         // normally a new IP address has been leased to the node and
         // therefore the old one becomes unavailable
         // for that reason use MAX number of attempts in order to avoid an infinite  loop
-        Integer MAX_ATTEMPTS = 5;
+        Integer MAX_ATTEMPTS = 25;
         Integer attemptCounter = 0;
         while (!output.contains(checkString) && (attemptCounter <= MAX_ATTEMPTS)) {
             AnSshConnector sshConnector = new AnSshConnector(ip, SSH_PORT, sshUsername, sshPassword, SSH_TIMEOUT);

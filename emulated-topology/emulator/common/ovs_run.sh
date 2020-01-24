@@ -30,7 +30,7 @@ ovsdb-server --remote=punix:/usr/local/var/run/openvswitch/db.sock \
 
 ovs-vsctl --no-wait set Open_vSwitch . other_config:dpdk-socket-mem="1024"
 ovs-vsctl --no-wait set Open_vSwitch . other_config:dpdk-init=true
-ovs-vsctl --no-wait set Open_vSwitch . external-ids:hostname=$(hostname)
+#ovs-vsctl --no-wait set Open_vSwitch . external-ids:hostname=$(hostname)
 ovs-ctl --no-ovsdb-server --db-sock="$DB_SOCK" start
 
 ovs-vsctl add-br br100

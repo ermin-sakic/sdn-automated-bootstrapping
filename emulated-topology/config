@@ -65,5 +65,5 @@ AKKA_GOSSIP_PORT="2550"
 # Select the desired topology from the topology folder
 # Please look at the topology folder for the visual
 # information on the selected topology
-TOPOLOGY="grid3x3"
+TOPOLOGY="grid8x8"
 
