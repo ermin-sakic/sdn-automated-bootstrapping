@@ -31,7 +31,7 @@ Details on both designs are presented in the attached ACM SOSR publication.
 ## Usage
 
 ### Build Tools:
-- OpenJDK 8+
+- OpenJDK 8
 - Docker-CE latest package (each OVS instance is hosted in a separate container interconnected using veth pairs)
 - Maven
 
