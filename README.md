@@ -1,3 +1,5 @@
+# INITIAL REPOSITORY SETUP IS WORK IN PROGRESS!
+
 # Automated Bootstrapping of In-Band Controlled SDNs
 
 - OpenDaylight-compatible modules and exemplary network emulation for bootstrapping of a multi-controller OpenFlow-based in-band control plane.
