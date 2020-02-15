@@ -95,16 +95,16 @@ module bootstrappingmanager-alternative-setup-impl {
 
             leaf controller-ip-1 {
                 type string;
-                //default "10.10.0.101";
+                //default "10.10.0.10";
             }
             leaf controller-ip-2 {
                 type string;
-                //default "10.10.0.102";
+                //default "10.10.0.11";
 
             }
             leaf controller-ip-3 {
                 type string;
-                //default "10.10.0.103";
+                //default "10.10.0.12";
             }
 
             leaf arping-path {

@@ -24,9 +24,9 @@
           <ssh-username>admin</ssh-username>
           <ssh-password>admin</ssh-password>
 
-          <controller-ip-1>10.10.0.101</controller-ip-1>
-		  <!--<controller-ip-2>10.10.0.102</controller-ip-2>-->
-		  <!--<controller-ip-3>10.10.0.103</controller-ip-3>-->
+          <controller-ip-1>10.10.0.10</controller-ip-1>
+	  <!--<controller-ip-2>10.10.0.11</controller-ip-2>-->
+	  <!--<controller-ip-3>10.10.0.12</controller-ip-3>-->
           <!-- LOCAL TESTING -->
           <arping-path>sudo ip netns exec ODL-Controller-SDNC-1 /home/ermin/run_arping.sh</arping-path>
 

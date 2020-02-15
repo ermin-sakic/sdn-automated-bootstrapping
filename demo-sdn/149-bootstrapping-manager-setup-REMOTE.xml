@@ -4,8 +4,7 @@
     <data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
       <modules xmlns="urn:opendaylight:params:xml:ns:yang:controller:config">
         <module>
-          <type
-                  xmlns:prefix="urn:eu:virtuwind:bootstrappingmanager:setup:impl">prefix:setup-impl</type>
+          <type xmlns:prefix="urn:eu:virtuwind:bootstrappingmanager:setup:impl">prefix:setup-impl</type>
           <name>setup-impl</name>
 
           <notification-service>
@@ -24,9 +23,9 @@
           <ssh-username>admin</ssh-username>
           <ssh-password>admin</ssh-password>
 
-          <controller-ip-1>10.10.0.101</controller-ip-1>
-	  <!--<controller-ip-2>10.10.0.102</controller-ip-2>-->
-	  <!--<controller-ip-3>10.10.0.103</controller-ip-3>-->
+          <controller-ip-1>10.10.0.10</controller-ip-1>
+	  <!--<controller-ip-2>10.10.0.11</controller-ip-2>-->
+	  <!--<controller-ip-3>10.10.0.12</controller-ip-3>-->
           <!-- TESTING ON THE SERVER -->
 	  <arping-path>/home/ermin/run_arping.sh</arping-path>
 

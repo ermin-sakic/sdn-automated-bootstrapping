@@ -3,13 +3,13 @@ odl-cluster-data {
   akka {
     remote {
       netty.tcp {
-        hostname = "10.10.0.103"
+        hostname = "10.10.0.12"
         port = 2550
       }
     }
 
     cluster {
-      seed-nodes = ["akka.tcp://opendaylight-cluster-data@10.10.0.101:2550", "akka.tcp://opendaylight-cluster-data@10.10.0.102:2550", "akka.tcp://opendaylight-cluster-data@10.10.0.103:2550"]
+      seed-nodes = ["akka.tcp://opendaylight-cluster-data@10.10.0.10:2550", "akka.tcp://opendaylight-cluster-data@10.10.0.11:2550", "akka.tcp://opendaylight-cluster-data@10.10.0.12:2550"]
 
       roles = [
         "member-3"

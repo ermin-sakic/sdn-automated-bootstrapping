@@ -73,7 +73,7 @@ Useful commands:
 
 #### Controller Self-Discovery
 
-* *Manually*: `sudo ip netns exec ODL-Controller-SDNC-1 ~/run_arping.sh 10.10.0.101 veth-SDNC-1-c` - used only for debugging purposes
+* *Manually*: `sudo ip netns exec ODL-Controller-SDNC-1 ~/run_arping.sh 10.10.0.10 veth-SDNC-1-c` - used only for debugging purposes
 
 *  *Automatic*: Configure arping path in the *bootstrapping-manager-alternative-setup* config XML file like this: `<arping-path>sudo ip netns exec ODL-Controller-SDNC-1 /home/ermin/run_arping.sh</arping-path>`
 You can use the available script `configure_arping_local_remote.sh` to automatically toggle the arping configuration between the local and the remote setup, if you have both present in your XML file:

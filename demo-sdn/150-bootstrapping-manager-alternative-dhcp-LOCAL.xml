@@ -49,8 +49,8 @@
 
 	  <dhcp-server-config>
             <dhcp-ranges>
-              <dhcp-addr-range-begin>10.10.0.30</dhcp-addr-range-begin>
-              <dhcp-addr-range-end>10.10.0.59</dhcp-addr-range-end>
+              <dhcp-addr-range-begin>10.10.0.20</dhcp-addr-range-begin>
+              <dhcp-addr-range-end>10.10.0.254</dhcp-addr-range-end>
             </dhcp-ranges>
             <bind-dhcp-interface>
               <interface-name>veth-SDNC-1-c</interface-name>

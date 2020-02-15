@@ -94,9 +94,9 @@ public class ResiliencePathManagerImpl implements ResiliencePathManager<Pair<Res
     static
     {
         controllerRecognizeCookies = new HashMap<String, String>();
-        controllerRecognizeCookies.put("10.10.0.101", "aaaaa");
-        controllerRecognizeCookies.put("10.10.0.102", "bbbbb");
-        controllerRecognizeCookies.put("10.10.0.103", "ccccc");
+        controllerRecognizeCookies.put("10.10.0.10", "aaaaa");
+        controllerRecognizeCookies.put("10.10.0.11", "bbbbb");
+        controllerRecognizeCookies.put("10.10.0.12", "ccccc");
     }
 
 
