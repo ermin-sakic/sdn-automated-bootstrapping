@@ -133,11 +133,12 @@ public class InitialFlowWriter implements ClusteredDataTreeChangeListener<Node> 
                                                 LOG.warn("stateManager instance currently not available!!!");
                                             }
                                         }
-                                        synchronized (SyncLock.threadSync.get(nodeIPAddress)) {
+                                        String attemptId = nodeIPAddress + ConfigureNewOpenFlowNodeAuto.mapToMacAddress(nodeIPAddress);
+                                        synchronized (SyncLock.threadSync.get(attemptId)) {
                                             try {
-                                                while(!SyncLock.threadSync.get(nodeIPAddress).isCondVariable()){
-                                                    LOG.info("Waiting for ConfNBI thread of " + nodeIPAddress + " to finish.");
-                                                    SyncLock.threadSync.get(nodeIPAddress).wait();
+                                                while(!SyncLock.threadSync.get(attemptId).isCondVariable()){
+                                                    LOG.info("Waiting for ConfAuto thread of " + nodeIPAddress + " to finish.");
+                                                    SyncLock.threadSync.get(attemptId).wait();
                                                 }
                                             } catch (InterruptedException e) {
                                                 e.printStackTrace();

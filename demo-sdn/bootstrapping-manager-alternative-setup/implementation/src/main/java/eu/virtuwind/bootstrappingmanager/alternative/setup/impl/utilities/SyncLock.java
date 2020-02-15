@@ -10,7 +10,9 @@
  */
 package eu.virtuwind.bootstrappingmanager.alternative.setup.impl.utilities;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *  Data structure used to store conditional variables for each thread pair
@@ -18,7 +20,7 @@ import java.util.HashMap;
  *  synchronization
  */
 public class SyncLock {
-    public static HashMap<String, SyncLock> threadSync = new HashMap<>();
+    public static Map<String, SyncLock> threadSync = Collections.synchronizedMap(new HashMap<>());
     private boolean condVariable = false;
 
     public boolean isCondVariable() {
