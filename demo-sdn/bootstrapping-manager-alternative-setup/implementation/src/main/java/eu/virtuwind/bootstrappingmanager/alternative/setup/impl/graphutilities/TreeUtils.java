@@ -466,7 +466,7 @@ public class TreeUtils {
         // find all ports on the switch
         List<NodeConnector> nodeConnectors = null;
         while (nodeConnectors == null) { // with multiple controllers can be an issue they do not synchronize very fast
-            LOG.warn("NodeConnectors for the node {} still not available in the DS", nodeID);
+            LOG.debug("NodeConnectors for the node {} still not available in the DS", nodeID);
             nodeConnectors = InitialFlowUtils.getAllNodeConnectorsFromNode(nodeID, dataBroker);
             try {
                 sleep(100);

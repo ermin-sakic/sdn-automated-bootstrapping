@@ -270,7 +270,7 @@ public class ControllerSelfDiscovery  implements ClusteredDataTreeChangeListener
                         while ((line = reader.readLine()) != null) {
                             result.append(line + "\n");
                         }
-                        LOG.info("CSD: ARPING: " + result.toString());
+                        LOG.debug("CSD: ARPING: " + result.toString());
                         sleep_some_time(100);
 
 
@@ -293,7 +293,7 @@ public class ControllerSelfDiscovery  implements ClusteredDataTreeChangeListener
                             while ((line = reader.readLine()) != null) {
                                 result.append(line + "\n");
                             }
-                            LOG.info("CSD: ARPING: " + result.toString());
+                            LOG.debug("CSD: ARPING: " + result.toString());
                             sleep_some_time(100);
 
 
@@ -336,7 +336,7 @@ public class ControllerSelfDiscovery  implements ClusteredDataTreeChangeListener
                     while ((line = reader.readLine()) != null) {
                         result.append(line + "\n");
                     }
-                    LOG.info("CSDF: ARPING: " + result.toString());
+                    LOG.debug("CSDF: ARPING: " + result.toString());
 
                 } catch (Exception e) {
                     e.printStackTrace();

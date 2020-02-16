@@ -168,18 +168,18 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
 
             NodeId switchId = change.getRootPath().getRootIdentifier().firstKeyOf(Node.class).getId();
 
-            //get a state before a change -> can throw NullPointerException
+            //get a state before the change -> can throw NullPointerException
             String previousState = null;
             try {
                 previousState = change.getRootNode().getDataBefore().getState().getName();
-                LOG.info("InitialOFRulesPhaseII for the switch {} and previous switch state {}", switchId, previousState);
+                LOG.debug("InitialOFRulesPhaseII for the switch {} and previous switch state {}", switchId, previousState);
 
             } catch (NullPointerException e) {
-                LOG.info("First time OF-SESSION-ESTABLISHED with node {}", switchId.getValue());
+                LOG.warn("First time OF-SESSION-ESTABLISHED with node {}", switchId.getValue());
             }
-            // get a state after a change has happened
+            // get a state after the change has happened
             String afterState = change.getRootNode().getDataAfter().getState().getName();
-            LOG.info("InitialOFRulesPhaseII for the switch {} and after state {}", switchId, afterState);
+            LOG.debug("InitialOFRulesPhaseII for the switch {} and after state {}", switchId, afterState);
 
             if (isLeader) {
 
@@ -188,7 +188,7 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
                             && previousState.equals(SwitchBootsrappingState.State.CONTROLLERSELFDISCOVERYDONE.getName())
                             && !initialOFPhaseIIDoneNodes.contains(switchId.getValue())) {
 
-                        LOG.info("PHII: Initial OF Rules Phase II ready for node {}", switchId.getValue());
+                        LOG.info("Initial OF Rules Phase II ready for node {}", switchId.getValue());
 
                         Thread executor = new Thread(new InitialOFRulesPhaseII.InitialOFRulesPhaseIIExecutor(switchId));
                         executor.start();
@@ -206,7 +206,7 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
                                     .build());
                             initialOFPhaseIIDoneNodes.add(switchId.getValue());
                             String currentState = stateManager.readBootstrappingSwitchStateName(switchId);
-                            LOG.info("PHII: InitialOFRulesPhaseII state changed to {} for the node {} ", currentState, switchId.getValue());
+                            LOG.info("InitialOFRulesPhaseII state changed to {} for node {} ", currentState, switchId.getValue());
                         }
 
                         executorScheduler.execute(new NextLevelTrigger(
@@ -256,7 +256,7 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
 
             // wait till all the functional NodeConnectors appear in NetworkTopology DS
             while (!InitialFlowUtils.nodeConnectorsInTopology(functionalNodeConnectors, db)) {
-                LOG.info("All available links on node {} still not discovered", switchId.getValue());
+                LOG.info("All connected links on node {} are still not discovered", switchId.getValue());
                 sleep_some_time(150);
             }
             LOG.info("All links connected to node {} are discovered.", switchId.getValue());
@@ -266,8 +266,8 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
                 LOG.info("All functional NodeConnectors on node {} still not processed by the tree algorithm", switchId.getValue());
                 sleep_some_time(100);
             }
-            LOG.info("All NodeConnectors from the node {} processed by the tree algorithm.", switchId.getValue());
-            LOG.info("Ready for InitialOFPHASEII");
+            LOG.info("All NodeConnectors from node {} are processed by the tree algorithm", switchId.getValue());
+            LOG.info("Node {} is ready for InitialOFPHASEII",  switchId.getValue());
 
             // when initial config is provided via REST
             if (ctlList.size() == 0) {
@@ -283,7 +283,7 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
                     ctlList.add(ctlIp.getIpAddr());
             }
 
-            // find interface of the controller instance on which this code is being executed
+            // find the interface of the controller instance on which this code is being executed
             HostUtilities.InterfaceConfiguration myIfConfig =
                     HostUtilities.returnMyIfConfig(ctlList);
             if (myIfConfig == null) {
@@ -294,35 +294,7 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
 
             // find the tree ports for the given switchId
             List<String> treePorts = findTreePorts(switchId.getValue());
-            LOG.debug("IOFII: Node:{} -> tree ports: {}", switchId.getValue(), treePorts.toString());
-
-            /**
-             * Older algorithm version
-             */
-            /*
-            // find the tree port leading to the controller
-            String rootPort = findRootPort(switchId.getValue(), ctlIpAddr, topologyId);
-            // find the tree ports that do not lead to the controller
-            List<String> quasiMstTreePorts = findQuasiBroadcastPorts(switchId.getValue(), ctlIpAddr, topologyId);
-
-            //**********************************************************************************************************
-            // if tree was not ready
-            // (should not be the case because we wait until  NodeConnectors are processed by the tree algorithm) - try to estimate tree ports
-            // this was the older version of the tree algorithm
-            if (quasiMstTreePorts == null) {
-                    // should not happen, depends if the timeout value has been chosen properly
-                    try {
-                        quasiMstTreePorts = estimateQuasiBroadcastingPortsBasedOnCurrentData(switchId.getValue(), ctlIpAddr,
-                            topologyId);
-                    } catch (InterruptedException e) {
-                        for (String m: ExceptionUtils.getRootCauseStackTrace(e)) {
-                            LOG.error("InitialOFRulesPhaseII: Stack root cause trace -> {}", m);
-                        }
-                    }
-                    LOG.debug("IOFII: Node: {} has estimated quasi broadcast ports: {}", switchId.getValue(), quasiMstTreePorts.toString());
-            }
-            //**********************************************************************************************************
-            */
+            LOG.info("These are tree ports computed for node {}: {}", switchId.getValue(), treePorts.toString());
 
             LOG.info("Setting OF flows. Overwriting rules from the Phase I.");
 
@@ -337,18 +309,7 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
             /* Port aggregation in one list */
             List<String> treeUsablePorts = treePorts;
 
-            /*
-               Older version
-             */
-            /*
-            List<String> treeUsablePorts = new ArrayList<>();
-            treeUsablePorts.add(rootPort);
-            for (String port: quasiMstTreePorts) {
-                treeUsablePorts.add(port);
-            }
-            */
-
-            LOG.debug("IOFII: Node:{} -> treeUsablePorts: {}", switchId.getValue(), treeUsablePorts.toString());
+            LOG.debug("Node:{} -> treeUsablePorts: {}", switchId.getValue(), treeUsablePorts.toString());
 
             /*  OF TRAFFIC RULES */
             /*----------------------------------------------------------------------------------------------------------------------------------------*/
@@ -384,9 +345,7 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
                 InitialFlowUtils.writeFlowToController(salFlowService, nodeId, tableId, flowIdFromController, flowFromController);
 
             }
-
             /*----------------------------------------------------------------------------------------------------------------------------------------*/
-
 
             /*  DHCP TRAFFIC RULES */
             /*----------------------------------------------------------------------------------------------------------------------------------------*/
@@ -417,7 +376,6 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
                 InitialFlowUtils.writeFlowToController(salFlowService, nodeId, tableId, flowIdOfferAck, flowOfferAck);
 
             }
-
             /*----------------------------------------------------------------------------------------------------------------------------------------*/
 
 
@@ -425,7 +383,6 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
             /*----------------------------------------------------------------------------------------------------------------------------------------*/
 
             LOG.info("Setting SSH flows. Overwriting rules from the Phase I.");
-
 
             for (String inPort: treeUsablePorts) {
                 List<String> outPorts = new ArrayList<>(treeUsablePorts);
@@ -452,7 +409,6 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
                 InitialFlowUtils.writeFlowToController(salFlowService, nodeId, tableId, flowIdSSHFromController, flowSSHFromController);
 
             }
-
             /*----------------------------------------------------------------------------------------------------------------------------------------*/
 
             /* ARP TRAFFIC RULES */
@@ -478,12 +434,13 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
             // remember phaseII rules for this switch
             InitialFlowUtils.removableFlowCookiesPhaseII.put(switchId.getValue(), rulesToRemember);
 
-            // remove old rules when new are installed (safer)
+            // remove old rules when new are installed
             List<FlowCookie> oldRulesToRemove = InitialFlowUtils.removableFlowCookiesPhaseI.get(switchId.getValue());
             if (oldRulesToRemove != null) {
                 for (FlowCookie flowCookie : oldRulesToRemove) {
                     InitialFlowUtils.removeOpenFlowFlow(salFlowService, flowCookie, switchId.getValue());
                 }
+                LOG.info("Removing OF rules from Phase I for node {}", switchId.getValue());
             }
 
         }
@@ -518,7 +475,7 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
                 // processing node level
                 Integer thisNodeTreeLevel = treeGraph.getVertexTreeLevel(switchId);
 
-                LOG.info("NLTM: Triggered by Node {} with level {}", switchId.getValue(), thisNodeTreeLevel);
+                LOG.debug("NLTM: Triggered by Node {} with level {}", switchId.getValue(), thisNodeTreeLevel);
 
 
                 // get all switch nodes on this level
@@ -532,16 +489,16 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
                         // there is always only one node with the level 0
                         expectedNumberOfCurrentLevelNodes = 1;
                         numberOfNodesByTreeLevelsCache.put(0, expectedNumberOfCurrentLevelNodes);
-                        LOG.info("NLTM: Level 0 node {} processed", switchId.getValue());
+                        LOG.debug("NLTM: Level 0 node {} processed", switchId.getValue());
 
                     } else if (!numberOfNodesByTreeLevelsCache.isEmpty() &&
                             (numberOfNodesByTreeLevelsCache.containsKey(thisNodeTreeLevel))) {
-                        LOG.info("NLTM: The number of nodes in the level {} already computed, consulting cache for node {}...",
+                        LOG.debug("NLTM: The number of nodes in the level {} already computed, consulting cache for node {}...",
                                 thisNodeTreeLevel, switchId.getValue());
                         expectedNumberOfCurrentLevelNodes = numberOfNodesByTreeLevelsCache.get(thisNodeTreeLevel);
 
                     } else {
-                        LOG.info("NLTM: The number of nodes in the level {} is being computed for the first time for node {}",
+                        LOG.debug("NLTM: The number of nodes in the level {} is being computed for the first time for node {}",
                                 thisNodeTreeLevel, switchId.getValue());
                         expectedNumberOfCurrentLevelNodes = findOutNumberOfNextLevelNodes(treeGraph, thisNodeTreeLevel - 1);
                         numberOfNodesByTreeLevelsCache.put(thisNodeTreeLevel, expectedNumberOfCurrentLevelNodes);
@@ -550,16 +507,16 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
                 } catch (Exception e) {
                     LOG.error("NLTM: Exception");
                     for (String m: ExceptionUtils.getRootCauseStackTrace(e)) {
-                        LOG.info("NLTM: Stack root cause trace -> {}", m);
+                        LOG.warn("NLTM: Stack root cause trace -> {}", m);
                     }
 
                     return;
                 }
 
-                LOG.info("NLTM: expectedNumberOfCurrentLevelNodes: {} sameLevelNode.size(): {} in the level {}",
+                LOG.debug("NLTM: expectedNumberOfCurrentLevelNodes: {} sameLevelNode.size(): {} in the level {}",
                         expectedNumberOfCurrentLevelNodes, sameLevelNodes.size(), thisNodeTreeLevel);
                 if (expectedNumberOfCurrentLevelNodes != sameLevelNodes.size()) {
-                    LOG.info("NLTM: Node {} ready, but some of the nodes on level {} are not discovered. Come back later!",
+                    LOG.debug("NLTM: Node {} ready, but some of the nodes on level {} are not discovered. Come back later!",
                             switchId.getValue(), thisNodeTreeLevel);
                     return;
                 }
@@ -576,18 +533,18 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
                                 .getSwitchBootsrappingState().getState().getName()
                                 .equals(SwitchBootsrappingState.State.INTERMEDIATERESILIENCEINSTALLED.getName())) {
 
-                            LOG.info("NLTM: Node {} has the level {} and has finished the Initial OF Phase II.",
+                            LOG.debug("NLTM: Node {} has the level {} and has finished the Initial OF Phase II.",
                                     inventoryNode.getId().getValue(), treeGraph.getVertexTreeLevel(topologyNodeId));
 
                         } else {
-                            LOG.info("NLTM: Node {} with the level {} is in this state {} and still not ready.",
+                            LOG.debug("NLTM: Node {} with the level {} is in this state {} and still not ready.",
                                     inventoryNode.getId().getValue(),
                                     treeGraph.getVertexTreeLevel(topologyNodeId),
                                     inventoryNode.getAugmentation(SwitchBootstrappingAugmentation.class)
                                             .getSwitchBootsrappingState().getState().getName());
                             // wait for the last configured node to trigger the next level configuration
                             // stop the thread here
-                            LOG.info("NLTM: Come again when the node has already reached the INITIALOFRULESPHASEIIDONE state.");
+                            LOG.debug("NLTM: Come again when the node has already reached the INITIALOFRULESPHASEIIDONE state.");
                             return;
                         }
                     }
@@ -599,7 +556,7 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
                 } catch (NullPointerException e) {
                     LOG.warn("NLTM: II-> Inventory nodes currently not available.");
                 }
-                LOG.info("NLTM: Current inventory size: {}", inventoryNodes.size());
+                LOG.debug("NLTM: Current inventory size: {}", inventoryNodes.size());
                 // trigger configuring the next level switches
                 for (Node inventoryNode : inventoryNodes) {
                     String state = "";
@@ -628,7 +585,7 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
                     // for the root node
                     isRefresherStartedForThisLevel.put(thisNodeTreeLevel, true);
 
-                    LOG.info("NLTM: Starting refresher for the root node level.");
+                    LOG.debug("NLTM: Starting refresher for the root node level.");
                     executorSchedulerRefresher.schedule(new NextLevelTriggerRefresher(thisNodeTreeLevel), DEFAULT_MONITOR_REFRESH_PERIOD, TimeUnit.MILLISECONDS);
 
                 } else { // start a refresher
@@ -638,12 +595,12 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
 
                         isRefresherStartedForThisLevel.put(thisNodeTreeLevel, true);
 
-                        LOG.info("NLTM: Starting refresher for the level {}.", thisNodeTreeLevel);
+                        LOG.info("NLTM: Starting refresher for the topology level {}.", thisNodeTreeLevel);
                         // start the refresher for this level
                         executorSchedulerRefresher.schedule(new NextLevelTriggerRefresher(thisNodeTreeLevel), DEFAULT_MONITOR_REFRESH_PERIOD, TimeUnit.MILLISECONDS);
 
                     } else {
-                        LOG.info("NLTM: Refresher already started for the level {}.", thisNodeTreeLevel);
+                        LOG.debug("NLTM: Refresher already started for the level {}.", thisNodeTreeLevel);
                     }
                 }
 
@@ -684,7 +641,6 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
             }
 
             return  connectorsExpectedToLeadToNextLevelNodes.size();
-
         }
 
         private boolean checkIfNodeConnectorNextLevel(String nodeConnectorId, HopByHopTreeGraph treeGraph, Integer currentLevel) {
@@ -724,7 +680,7 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
                     nextLevelTriggerRefresherExecCounters.put(level, 1);
                 }
                 execNum = nextLevelTriggerRefresherExecCounters.get(level);
-                LOG.info("NLTR: Refresher for level {} has been executed {} times", level, execNum);
+                LOG.debug("NLTR: Refresher for level {} has been executed {} times", level, execNum);
             }
 
             if (execNum < maxExecNum) {
@@ -734,7 +690,7 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
 
                 synchronized (nextLevelTriggerRefresherLock) {
 
-                    LOG.info("NLTR: Refresher for the level {} working", level);
+                    LOG.debug("NLTR: Refresher for the level {} working", level);
                     BootstrappingSwitchStateImpl stateManager = BootstrappingSwitchStateImpl.getInstance();
                     // check if other next level nodes are done with phase II
                     HopByHopTreeGraph treeGraph = networkGraphService.getCurrentHopByHopTreeGraph();
@@ -755,12 +711,12 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
                     }
 
                     // continue configuring the next level switches
-                    LOG.info("Checking ithe states of the level {} switches", level + 1);
+                    LOG.debug("Checking the states of the level {} switches", level + 1);
                     for (Node inventoryNode : inventoryNodes) {
                         org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId topologyNodeId
                                 = new org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId(inventoryNode.getId().getValue());
                         if (nextLevelNodes.contains(topologyNodeId)) { // this should prevent NullPointerException when retrieving a switch state
-                            LOG.info("NLTR: inventoryNode-> {}", inventoryNode.getId().getValue());
+                            LOG.debug("NLTR: inventoryNode-> {}", inventoryNode.getId().getValue());
                             String state = null;
                             try {
                                 state = inventoryNode.getAugmentation(SwitchBootstrappingAugmentation.class)
@@ -786,7 +742,7 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
                             if (state.equals(SwitchBootsrappingState.State.OFSESSIONESTABLISHED.getName())
                                     && nextLevelNodes.contains(nodeId)) {// samelevelnodes to next level nodes (unnecessary)
 
-                                LOG.info("NLTR: Node {} has the state {} and level {}", inventoryNode.getId().getValue(), state,
+                                LOG.debug("NLTR: Node {} has the state {} and level {}", inventoryNode.getId().getValue(), state,
                                         level+1);
 
 
@@ -806,7 +762,7 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
                                     of a switch when they probe the network with ARP self-discovery packet
                                 */
 
-                                LOG.info("NLTR: Node {} has the state {} and level {}", inventoryNode.getId().getValue(), state,
+                                LOG.debug("NLTR: Node {} has the state {} and level {}", inventoryNode.getId().getValue(), state,
                                         level+1);
 
                                 stateManager.writeBootstrappingSwitchState(inventoryNode.getId(), new SwitchBootsrappingStateBuilder()
@@ -818,7 +774,7 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
                                 LOG.info("NLTR: Informing node {} to proceed with InitialOFPhaseI", inventoryNode.getId().getValue());
 
                             } else {
-                                LOG.info("NLTR: Node {} has the state {} and level {} -> already triggered", inventoryNode.getId().getValue(), state,
+                                LOG.debug("NLTR: Node {} has the state {} and level {} -> already triggered", inventoryNode.getId().getValue(), state,
                                         level+1);
                             }
                         }
@@ -832,7 +788,6 @@ public class InitialOFRulesPhaseII implements ClusteredDataTreeChangeListener<Sw
 
         }
     }
-
 
     /**
      * Implements the reaction to cluster leadership changes.

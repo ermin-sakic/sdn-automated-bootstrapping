@@ -119,28 +119,28 @@ public class InitialOFRulesPhaseI implements ClusteredDataTreeChangeListener<Swi
 
             for (DataTreeModification<SwitchBootsrappingState> change : changes) {
 
-                // get a node-id on which a change has happened
+                // get a node-id on which the change has happened
                 switchId = change.getRootPath().getRootIdentifier().firstKeyOf(Node.class).getId();
-                //get a state before a change -> can throw NullPointerException
+                //get a state before the change -> can throw NullPointerException
                 String previousState = null;
                 try {
                     previousState = change.getRootNode().getDataBefore().getState().getName();
-                    LOG.info("InitialOFRulesPhaseI for the switch {} and previous switch state {}", switchId, previousState);
+                    LOG.debug("InitialOFRulesPhaseI for the switch {} and previous switch state {}", switchId, previousState);
 
                 } catch (NullPointerException e) {
-                    LOG.info("First time OF-SESSION-ESTABLISHED with node {}", switchId.getValue());
+                    LOG.warn("First time OF-SESSION-ESTABLISHED with node {}", switchId.getValue());
                 }
 
-                // get a state after a change has happened
+                // get a state after the change has happened
                 String afterState = change.getRootNode().getDataAfter().getState().getName();
-                LOG.info("InitialOFRulesPhaseI for the switch {} and after state {}", switchId, afterState);
+                LOG.debug("InitialOFRulesPhaseI for the switch {} and after state {}", switchId, afterState);
                 if (isLeader) {
 
                     if (afterState.equals(SwitchBootsrappingState.State.CONTROLLERSELFDISCOVERYDONE.getName())
                             && previousState != null
                             && previousState.equals(SwitchBootsrappingState.State.CONTROLLERSELFDISCOVERYRULEINSTALLED.getName())
                             && !initialOFPhaseIDoneNodes.contains(switchId.getValue())) {
-                        LOG.info("PHI: Initial OF Rules Phase I ready for node {}", switchId.getValue());
+                        LOG.info("Initial OF Rules Phase I ready for node {}", switchId.getValue());
 
                         // Follower controllers will change the state of a switch to CONTROLLERSELFDISCOVERYDONE.
                         // The leader expects this when a switch reaches this piece of code.
@@ -165,7 +165,7 @@ public class InitialOFRulesPhaseI implements ClusteredDataTreeChangeListener<Swi
                                     .setState(SwitchBootsrappingState.State.INITIALOFRULESPHASEIDONE)
                                     .build());
                             String currentState = stateManager.readBootstrappingSwitchStateName(switchId);
-                            LOG.info("InitialOFRulesPhaseI state in node {} changed: {}", switchId.getValue(), currentState);
+                            LOG.info("InitialOFRulesPhaseI state in node {} changed to {}", switchId.getValue(), currentState);
                             initialOFPhaseIDoneNodes.add(switchId.getValue());
                         }
                     }
@@ -217,7 +217,7 @@ public class InitialOFRulesPhaseI implements ClusteredDataTreeChangeListener<Swi
                     e.printStackTrace();
                 }
             }
-            LOG.info("Switch {} -> root port {}", switchId.getValue(), rootPort);
+            LOG.info("For node {} this is the root port {}", switchId.getValue(), rootPort);
 
             // add more processing since quasiMstTreePorts are still not available in order to avoid broadcasting storms
             List<String> quasiMstTreePortsEstimation = null;
@@ -230,7 +230,7 @@ public class InitialOFRulesPhaseI implements ClusteredDataTreeChangeListener<Swi
                 }
             }
 
-            LOG.info("For node {}, these are estimated quasi ports {}", switchId.getValue(), quasiMstTreePortsEstimation.toString());
+            LOG.info("For node {} these are estimated quasi ports {}", switchId.getValue(), quasiMstTreePortsEstimation.toString());
 
             // remember these rules to remove them in phase II
             List<FlowCookie> rulesToBeRemoved = new ArrayList<>();
