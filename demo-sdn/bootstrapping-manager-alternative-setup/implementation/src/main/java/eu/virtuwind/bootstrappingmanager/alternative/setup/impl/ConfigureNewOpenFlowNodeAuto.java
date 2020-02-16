@@ -157,10 +157,12 @@ public class ConfigureNewOpenFlowNodeAuto implements Runnable {
             LOG.info("Starting SSH thread for node ({}, {})",
                     deviceIp, deviceMacAddress);
 
-            if (sshThreadStore.get(deviceMacAddress) == null){
-                sshThreadStore.put(deviceMacAddress, new LinkedList<>());
+            synchronized (this) {
+                if (sshThreadStore.get(deviceMacAddress) == null) {
+                    sshThreadStore.put(deviceMacAddress, new LinkedList<>());
+                }
+                sshThreadStore.get(deviceMacAddress).add(this);
             }
-            sshThreadStore.get(deviceMacAddress).add(this);
 
             // wait for DHCP ACK
             try {
