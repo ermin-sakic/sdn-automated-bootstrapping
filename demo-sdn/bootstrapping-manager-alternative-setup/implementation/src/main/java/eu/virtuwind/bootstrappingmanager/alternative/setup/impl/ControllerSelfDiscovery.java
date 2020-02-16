@@ -123,23 +123,23 @@ public class ControllerSelfDiscovery  implements ClusteredDataTreeChangeListener
 
             Integer threadId = new Random().nextInt(1000);
 
-            // get a NodeId on which a change has happened
+            // get a NodeId of the node that has changed
             NodeId switchId = change.getRootPath().getRootIdentifier().firstKeyOf(Node.class).getId();
 
-            //get a state before a change -> can throw NullPointerException
+            // get a state before the change -> can throw NullPointerException
             String previousState = null;
             try {
                 previousState = change.getRootNode().getDataBefore().getState().getName();
-                LOG.info(threadId + ": ControllerSelfDiscovery for the switch {} and previous switch state {}", switchId, previousState);
+                LOG.info(threadId + ": ControllerSelfDiscovery for node {} with the previous node state {}", switchId, previousState);
 
             } catch (NullPointerException e) {
                 LOG.info(threadId + ": First time OF-SESSION-ESTABLISHED with node {}", switchId.getValue());
             }
-            // get a state after a change has happened
+            // get a state after the change has happened
             String afterState = change.getRootNode().getDataAfter().getState().getName();
-            LOG.info(threadId + ": ControllerSelfDiscovery for the switch {} and after state {}", switchId, afterState);
+            LOG.info(threadId + ": ControllerSelfDiscovery for node {} with the after state {}", switchId, afterState);
 
-            // get controller IPs and interface on which these IPs are binded
+            // get controller IPs and the interfaces on which these IPs are binded
             HostUtilities.InterfaceConfiguration myIfConfig =
                     HostUtilities.returnMyIfConfig(ctlList);
             if (myIfConfig == null) {
@@ -159,9 +159,7 @@ public class ControllerSelfDiscovery  implements ClusteredDataTreeChangeListener
                     Thread executor = new Thread(new ControllerSelfDiscoveryExecutor(switchId));
                     executor.start();
                     try { // wait till the self-discovery has been done in order to change a switch state
-                        LOG.trace("Prior join");
                         executor.join();
-                        LOG.trace("Post join");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -186,23 +184,22 @@ public class ControllerSelfDiscovery  implements ClusteredDataTreeChangeListener
                      }
                      initialSelfDiscoveryRuleInstalledDoneNodes.add(switchId.getValue());
 
-                     // install Discovery rule on the next level switches
                  } else if ((execCounterLeader > 1)
                          && (afterState.equals(SwitchBootsrappingState.State.OFSESSIONESTABLISHED.getName()))
                          && previousState == null) {
-
+                     // install Discovery rule on the next level switches
                      Thread executor = new Thread(new ControllerSelfDiscoveryRuleInstaller(switchId));
                      executor.start();
 
-                     LOG.info(threadId + ": CSD: The state of the next layer switches will be changed when this layer finishes processing.");
+                     LOG.info(threadId + ": The state of the next level switches will be changed when this level finishes processing.");
                 }
             } else {
-                /* To discover slave controllers probe each time when a switch reaches CONTROLLERSELFDISCOVERYRULEINSTALLED
+                /* To discover slave controllers, probe each time when a switch reaches CONTROLLERSELFDISCOVERYRULEINSTALLED.
                     ARP broadcasting will be dropped on the switch that is connected to the  leader and in that way
                     we avoid wrong discovery at the switch connected to the leader.
                     It is possible that temporarily a controller is discovered on a wrong switch, but when the switch that is
                     connected to the controller reaches the state CONTROLLERSELFDISCOVERYRULEINSTALLED,
-                    and the controllers probe the network again, this error will be fixed
+                    and the controllers probe the network again, this error will be fixed.
                 */
                 if (afterState.equals(SwitchBootsrappingState.State.CONTROLLERSELFDISCOVERYRULEINSTALLED.getName())
                         && previousState.equals(SwitchBootsrappingState.State.OFSESSIONESTABLISHED.getName())) {
@@ -215,7 +212,7 @@ public class ControllerSelfDiscovery  implements ClusteredDataTreeChangeListener
                     }
                     /*
                         In case that some of the controllers initially do not boot as fast as their peers
-                        it prevents bootstrapping stalls due to the waiting on controller link appearances
+                        it prevents bootstrapping stalls due to the delayed appearance of controller links
                      */
                     if (!executorSchedulerStarted) {
                         executorScheduler.scheduleAtFixedRate(new ControllerSelfDiscoveryFollowerPeriodicExecutor(switchId), 0, 1000, TimeUnit.MILLISECONDS);
@@ -281,7 +278,7 @@ public class ControllerSelfDiscovery  implements ClusteredDataTreeChangeListener
                         e.printStackTrace();
                     }
                 }
-                // TODO: Handle better in case of the exception occurence
+                // TODO: Handle better in case of an exception occurence
             } else {
                     // probe the network 5 times
                     for (int i = 0; i < 5; ++i) {
@@ -381,8 +378,6 @@ public class ControllerSelfDiscovery  implements ClusteredDataTreeChangeListener
             InitialFlowUtils.writeFlowToController(salFlowService, nodeId, tableId, flowId2, f2);
 
             // Add the same rules for the slave controllers but drop their packets to avoid false controller node discovery
-            // in the topology
-
             oPorts = new ArrayList<>();
             LOG.info("Self-Discovery rule for the slaves installed in the master switch {}", switchId.getValue());
             for (String conIP: ctlList) {
@@ -401,8 +396,7 @@ public class ControllerSelfDiscovery  implements ClusteredDataTreeChangeListener
                 }
             }
             LOG.info("Self-Discovery rules installation has been completed");
-
-
+            
             // increment execution number counter
             execCounterLeader++;
 
