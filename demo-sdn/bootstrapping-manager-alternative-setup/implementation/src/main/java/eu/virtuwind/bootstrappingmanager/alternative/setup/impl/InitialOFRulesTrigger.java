@@ -56,10 +56,8 @@ public class InitialOFRulesTrigger implements ClusteredDataTreeChangeListener<Li
                         String destination = change.getRootNode().getDataAfter().getDestination().getDestNode().getValue();
                         boolean alreadySelfDiscoveryDoneDst;
                         boolean alreadySelfDiscoveryDoneSrc;
-                        LOG.trace("Prior list");
                         alreadySelfDiscoveryDoneDst = ControllerSelfDiscovery.initialSelfDiscoveryDoneNodes.contains(destination);
                         alreadySelfDiscoveryDoneSrc = ControllerSelfDiscovery.initialSelfDiscoveryDoneNodes.contains(source);
-                        LOG.trace("Post list");
 
                         if (source.contains("host:")) {
                             // notify that self discovery is done for the leader
@@ -70,10 +68,8 @@ public class InitialOFRulesTrigger implements ClusteredDataTreeChangeListener<Li
                                         .setState(SwitchBootsrappingState.State.CONTROLLERSELFDISCOVERYDONE)
                                         .build());
                                 String currentState = stateManager.readBootstrappingSwitchStateName(switchId);
-                                LOG.debug("Prior adding");
                                 ControllerSelfDiscovery.initialSelfDiscoveryDoneNodes.add(switchId.getValue());
-                                LOG.debug("Post adding");
-                                LOG.info("InitialOFRulesTrigger change state of {} to {}", switchId, currentState);
+                                LOG.info("Change state of node {} to {}", switchId, currentState);
 
                             }
                             isAlreadyExecuted=true;
@@ -86,17 +82,15 @@ public class InitialOFRulesTrigger implements ClusteredDataTreeChangeListener<Li
                                 stateManager.writeBootstrappingSwitchState(switchId, new SwitchBootsrappingStateBuilder()
                                         .setState(SwitchBootsrappingState.State.CONTROLLERSELFDISCOVERYDONE)
                                         .build());
-                                LOG.debug("Prior adding");
                                 ControllerSelfDiscovery.initialSelfDiscoveryDoneNodes.add(switchId.getValue());
-                                LOG.debug("Post adding");
                                 String currentState = stateManager.readBootstrappingSwitchStateName(switchId);
-                                LOG.info("InitialOFRulesTrigger change state of {} to {}", switchId, currentState);
+                                LOG.info("Change state of node {} to {}", switchId, currentState);
                             }
                             isAlreadyExecuted=true;
                             ControllerSelfDiscovery.setIsDiscovered(true);
                         }
                     } catch (NullPointerException e) {
-                        LOG.error("InitialOFRulesTrigger: source or destination caused NullPointerException");
+                        LOG.error("Source or Destination caused NullPointerException");
                     }
 
                 } else if (!isLeader && (mod.getModificationType() == DataObjectModification.ModificationType.WRITE)) {
@@ -119,7 +113,7 @@ public class InitialOFRulesTrigger implements ClusteredDataTreeChangeListener<Li
                             ControllerSelfDiscovery.setIsDiscovered(true);
                         }
                     } catch (NullPointerException e) {
-                        LOG.error("InitialOFRulesTrigger: source or destination caused NullPointerException");
+                        LOG.error("Source or Destination caused NullPointerException");
                     }
                 }
             }
