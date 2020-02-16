@@ -71,7 +71,7 @@ public class InitialFlowWriter implements ClusteredDataTreeChangeListener<Node> 
                 DataObjectModification<Node> mod = change.getRootNode();
                 switch (mod.getModificationType()) {
                     case DELETE:
-                        //TODO: Extend logger to see when these weird situations happen
+                        //TODO: Extend the logger to see when these weird situations happen
                         if (mod.getDataBefore() != null) {
                             LOG.warn("Deleted node {} was in state: {}",
                                     mod.getDataBefore().getId().getValue(),
@@ -88,15 +88,16 @@ public class InitialFlowWriter implements ClusteredDataTreeChangeListener<Node> 
                     case SUBTREE_MODIFIED:
                         break; // TODO: Fix at some point
                     case WRITE:
-                        LOG.info("New node written in the DS.");
+                        LOG.info("New OF node written in the DS.");
                         while(!hasOwner) { sleep_some_time(5); }
 
                         if (mod.getDataBefore() == null) {
                             Node fetchedDS = mod.getDataAfter();
                             LOG.info("Node configuration updated remotely");
 
-                            if (!isLeader)
+                            if (!isLeader) {
                                 LOG.info("Data changed but not a leader...");
+                            }
 
                             if (isLeader && fetchedDS != null && bootstrappingDone == false) {
 
@@ -107,24 +108,15 @@ public class InitialFlowWriter implements ClusteredDataTreeChangeListener<Node> 
                                     InstanceIdentifier<Node> topoNodeId = (InstanceIdentifier<Node>) nodeInstanceIdentifier;
                                     if (topoNodeId.firstKeyOf(Node.class, NodeKey.class).getId().getValue().contains("openflow:")) {
 
-                                        //--------------------------------------------------------------------------------
                                         LOG.info("New OF capable node discovered: {}", fetchedDS.getKey().getId().getValue());
-                                        String nodeIPAddress = "";
-                                        // In case that a node has changed an IP address the new node in the datastore tree
-                                        // will be created and the old data will be deleted, therefore, return if no
-                                        // IP available after 10 attempts
-                                        Integer attemptCounter = 0;
-                                        while(nodeIPAddress.equals("") && attemptCounter<=10) {
-                                            attemptCounter++;
-                                            sleep_some_time(100);
-                                            nodeIPAddress =  InitialFlowUtils.getNodeIPAddress(fetchedDS, dataBroker);
-                                        }
-                                        if(attemptCounter == 10) {
+                                        String nodeIPAddress = fetchNodeIpAddressFromDS(fetchedDS);
+                                        if(nodeIPAddress.isEmpty()) {
                                             LOG.warn("Could not fetch an IP address for the node {}", fetchedDS.getId().getValue());
                                             return;
                                         }
-                                        LOG.info("IP address of the new node is {}", nodeIPAddress);
-                                        /****************************************************************************/
+                                        LOG.info("Node ({}, {}) maps to OF node {}",
+                                                nodeIPAddress, ConfigureNewOpenFlowNodeAuto.mapToMacAddress(nodeIPAddress), fetchedDS.getId().getValue());
+
                                         BootstrappingSwitchStateImpl stateManager = null;
                                         while (stateManager == null) {
                                             try {
@@ -150,9 +142,6 @@ public class InitialFlowWriter implements ClusteredDataTreeChangeListener<Node> 
                                                     .build());
                                             initialOFSessionEstablishedDoneNodes.add(fetchedDS.getKey().getId().getValue());
                                         }
-
-                                        /****************************************************************************/
-
                                     }
                                 }
 
@@ -199,6 +188,25 @@ public class InitialFlowWriter implements ClusteredDataTreeChangeListener<Node> 
             LOG.info("This node is set as the InitialFlowWriter follower.");
             setFollower();
         }
+    }
+
+    /**
+     * Fetches an IP address of the node from the DS
+     * @return
+     */
+    private String fetchNodeIpAddressFromDS(Node node) {
+        String nodeIPAddress = "";
+        // In case that a node has changed an IP address the new node in the datastore tree
+        // will be created and the old data will be deleted, therefore, return if no
+        // IP available after 10 attempts
+        Integer attemptCounter = 0;
+        while(nodeIPAddress.equals("") && attemptCounter<=10) {
+            attemptCounter++;
+            sleep_some_time(100);
+            nodeIPAddress =  InitialFlowUtils.getNodeIPAddress(node, dataBroker);
+        }
+
+        return nodeIPAddress;
     }
 
     /**
