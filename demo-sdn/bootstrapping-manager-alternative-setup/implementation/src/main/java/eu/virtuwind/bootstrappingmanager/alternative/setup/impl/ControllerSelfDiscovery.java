@@ -130,14 +130,14 @@ public class ControllerSelfDiscovery  implements ClusteredDataTreeChangeListener
             String previousState = null;
             try {
                 previousState = change.getRootNode().getDataBefore().getState().getName();
-                LOG.info(threadId + ": ControllerSelfDiscovery for node {} with the previous node state {}", switchId, previousState);
+                LOG.debug(threadId + ": ControllerSelfDiscovery for node {} with the previous node state {}", switchId, previousState);
 
             } catch (NullPointerException e) {
-                LOG.info(threadId + ": First time OF-SESSION-ESTABLISHED with node {}", switchId.getValue());
+                LOG.debug(threadId + ": First time OF-SESSION-ESTABLISHED with node {}", switchId.getValue());
             }
             // get a state after the change has happened
             String afterState = change.getRootNode().getDataAfter().getState().getName();
-            LOG.info(threadId + ": ControllerSelfDiscovery for node {} with the after state {}", switchId, afterState);
+            LOG.debug(threadId + ": ControllerSelfDiscovery for node {} with the after state {}", switchId, afterState);
 
             // get controller IPs and the interfaces on which these IPs are binded
             HostUtilities.InterfaceConfiguration myIfConfig =
@@ -396,7 +396,7 @@ public class ControllerSelfDiscovery  implements ClusteredDataTreeChangeListener
                 }
             }
             LOG.info("Self-Discovery rules installation has been completed");
-            
+
             // increment execution number counter
             execCounterLeader++;
 
