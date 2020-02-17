@@ -69,19 +69,19 @@ for intname in $(sudo docker exec -u root $container_id ls /sys/class/net); do
 
 		# Configure tc policer for arp traffic
 		# Add ingress queue discipline
-		sudo docker exec -u root $container_id tc qdisc add dev $intnameclean handle ffff: ingress
+		# sudo docker exec -u root $container_id tc qdisc add dev $intnameclean handle ffff: ingress
 		# Set tc policer to allow only ARP request per second on each ingress qdisc
 		# Mimicing meters
 		#sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol arp u32 match u32 0x00000001 0x0000ffff at 4 police rate 0.5kbit burst 65b drop flowid :1
-		sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol arp u32 match u32 0x00000001 0x0000ffff at 4 police rate 1.5kbit burst 65b drop flowid :1
+		#sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol arp u32 match u32 0x00000001 0x0000ffff at 4 police rate 1.5kbit burst 65b drop flowid :1
 		# Set the same policer at each egress qdisc
 		#sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol arp u32 match u32 0x00000001 0x0000ffff at 4 police rate 0.5kbit burst 65b drop flowid :1
-		sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol arp u32 match u32 0x00000001 0x0000ffff at 4 police rate 1.5kbit burst 65b drop flowid :1
- 		# Limit ARP replies also that coul create a storm 
+		#sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol arp u32 match u32 0x00000001 0x0000ffff at 4 police rate 1.5kbit burst 65b drop flowid :1
+ 		# Limit ARP replies also that could create a storm 
                  #sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol arp u32 match u32 0x00000002 0x0000ffff at 4 police rate 0.5kbit burst 65b drop flowid :1
-                 sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol arp u32 match u32 0x00000002 0x0000ffff at 4 police rate 1.5kbit burst 65b drop flowid :1
+                 #sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol arp u32 match u32 0x00000002 0x0000ffff at 4 police rate 1.5kbit burst 65b drop flowid :1
                  #sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol arp u32 match u32 0x00000002 0x0000ffff at 4 police rate 0.5kbit burst 65b drop flowid :1
-                 sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol arp u32 match u32 0x00000002 0x0000ffff at 4 police rate 1.5kbit burst 65b drop flowid :1
+                 #sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol arp u32 match u32 0x00000002 0x0000ffff at 4 police rate 1.5kbit burst 65b drop flowid :1
                  # Limit TCP SYN and SYN ACK that initially can create storm effects
 		 # Processing of the gossip port
 		 akka_dst_port_match_filter=$(printf "0x0000%04x" "$akka_gossip_tcp_port")
@@ -89,13 +89,13 @@ for intname in $(sudo docker exec -u root $container_id ls /sys/class/net); do
 		 akka_src_port_match_filter=$(printf "0x%04x0000" "$akka_gossip_tcp_port")
 		 echo "TCP SYN filtering on akka src port $akka_src_port_match_filter"
                  # SYN packet matching
-                 sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8 match u32 $akka_dst_port_match_filter 0x0000ffff at 20 match u32 0x00020000 0x000f0000 at 32 police rate 70kbit burst 800b drop flowid :1
+                 #sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8 match u32 $akka_dst_port_match_filter 0x0000ffff at 20 match u32 0x00020000 0x000f0000 at 32 police rate 70kbit burst 800b drop flowid :1
                  # SYN ACK matching
-                 sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8  match u32 $akka_src_port_match_filter 0xffff0000 at 20 match u32 0x00120000 0x00ff0000 at 32 police rate 70kbit burst 800b drop flowid :1
+                 #sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8  match u32 $akka_src_port_match_filter 0xffff0000 at 20 match u32 0x00120000 0x00ff0000 at 32 police rate 70kbit burst 800b drop flowid :1
                  # SYN packet matching
-                 sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8  match u32 $akka_dst_port_match_filter 0x0000ffff at 20 match u32 0x00020000 0x000f0000 at 32 police rate 70kbit burst 800b drop flowid :1
+                 #sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8  match u32 $akka_dst_port_match_filter 0x0000ffff at 20 match u32 0x00020000 0x000f0000 at 32 police rate 70kbit burst 800b drop flowid :1
                  # SYN ACK matching
-                 sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8 match u32 $akka_src_port_match_filter 0xffff0000 at 20 match u32 0x00120000 0x00ff0000 at 32 police rate 70kbit burst 800b drop flowid :1
+                 #sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8 match u32 $akka_src_port_match_filter 0xffff0000 at 20 match u32 0x00120000 0x00ff0000 at 32 police rate 70kbit burst 800b drop flowid :1
 
 	esac
 done
@@ -150,10 +150,6 @@ fi
 echo "Restore script setup"
 sudo docker cp ./emulator/alternative/restore_initial_OF_rules.sh $container_id:/
 sudo docker exec -u root -d $container_id /restore_initial_OF_rules.sh
-
-# If needed, set controller IP for the bridge
-# sudo docker exec -u root $container_id ifconfig br100 10.10.0.$(($sw_var+1))
-# sudo docker exec -u root $container_id ovs-vsctl set-controller br100 tcp:10.10.0.101:6633 tcp:10.10.0.102:6633 tcp:10.10.0.103:6633
 
 # Initialize some host services
 #for ho_var in $(seq 1 $no_ho)
