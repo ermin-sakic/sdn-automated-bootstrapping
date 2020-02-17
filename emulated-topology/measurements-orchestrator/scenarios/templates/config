@@ -50,7 +50,7 @@ CON_POSITION=(1)
 # network namespaces that are used.
 # For remote testing this parameter can be 
 # ignored
-CON_IP_START="10.10.0.101"
+CON_IP_START="10.10.0.10"
 
 # TCP port for the inter-controller gossip akka protocol
 # It is valid only when  BOOTSTRAPPING="ALTERNATIVE"

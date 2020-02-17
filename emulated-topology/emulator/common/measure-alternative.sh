@@ -102,17 +102,17 @@ while [ "$RESILIENT_OF_RULES_INSTALLED" = false ]; do
 				timestamp=$(date +"%T.%3N")
 				if [[ ! -z $(echo $resilience_done | grep -w "cookie=0xaaaaa") && ${controllersCheck[0]} == false ]]; then
 	
-					echo "Resilience installed for 10.10.0.101 -> $timestamp" >> $MEASUREMENT_RECORD
+					echo "Resilience installed for 10.10.0.10 -> $timestamp" >> $MEASUREMENT_RECORD
 					controllersCheck[0]=true
 
 				elif [[ ! -z $(echo $resilience_done | grep -w "cookie=0xbbbbb") && ${controllersCheck[1]} == false ]]; then
 					
-					echo "Resilience installed for 10.10.0.102 -> $timestamp" >> $MEASUREMENT_RECORD
+					echo "Resilience installed for 10.10.0.11 -> $timestamp" >> $MEASUREMENT_RECORD
 					controllersCheck[1]=true
 
 				elif [[ ! -z $(echo $resilience_done | grep -w "cookie=0xccccc") && ${controllersCheck[2]} == false ]]; then
 					
-					echo "Resilience installed for 10.10.0.103 -> $timestamp" >> $MEASUREMENT_RECORD
+					echo "Resilience installed for 10.10.0.12 -> $timestamp" >> $MEASUREMENT_RECORD
 					controllersCheck[2]=true
 				fi
 			fi

@@ -49,7 +49,7 @@ In the following, the brief description of each configurable variable in the con
 * **CON_IP_START** - is the variable that is valid only if you select LOCAL setup. Here you can specify the starting IP
  address of the SDN controllers. The specified address is assigned to the first controller. If you have specified more than 
  one SDN controller, than all subsequent controllers will be assigned with the IP addresses in the incremental fashion 
- (e.g. SDNC-1 -> 10.10.0.101; SDNC-2 -> 10.10.0.102; ...).
+ (e.g. SDNC-1 -> 10.10.0.10; SDNC-2 -> 10.10.0.11; ...).
  
 * **AKKA_GOSSIP_PORT** - is the variable valid only if you select the alternative approach. It is used to configure tc policers
 that prevent initial broadcast storms. It represents the excpected TCP port for the inter-controller traffic. 
