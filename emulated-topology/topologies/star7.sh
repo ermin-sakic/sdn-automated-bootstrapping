@@ -14,7 +14,7 @@
 #
 #   Description: 
 #
-#   An example of how the topology file should look like.
+#       An example of how the topology file should look like.
 #
 #	For switches always use the following naming convention:
 #	sw_num - where num should always be in range [1, SW_NUM]
@@ -24,7 +24,7 @@
 #	in this format.
 #
 #	This script creates a star topology with (SW_NUM - 1) petals (leaves),
-#  	 e.g. for a 5 petal star set SW_NUM=6	
+#  	e.g. for a 5 petal star set SW_NUM=6	
 # 
 ######################################################################
 

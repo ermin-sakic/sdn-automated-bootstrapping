@@ -16,12 +16,12 @@
 #
 #   An example of how the topology file should look like.
 #
-#	For switches always use the following naming convention:
-#	sw_num - where num should always be in range [1, SW_NUM]
+#   For switches always use the following naming convention:
+#   sw_num - where num should always be in range [1, SW_NUM]
 #
-#	For virtual ethernet interfaces names should always contain 
-#	"veth" substring, since some scripts rely on names being in 
-#	in this format.
+#   For virtual ethernet interfaces names should always contain 
+#   "veth" substring, because some scripts rely on names being in 
+#   in this format.
 # 
 ######################################################################
 

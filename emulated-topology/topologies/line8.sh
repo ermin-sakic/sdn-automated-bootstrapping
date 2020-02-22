@@ -14,7 +14,7 @@
 #
 #   Description: 
 #
-#   An example of how the topology file should look like.
+#       An example of how the topology file should look like.
 #
 #	For switches always use the following naming convention:
 #	sw_num - where num should always be in range [1, SW_NUM]
