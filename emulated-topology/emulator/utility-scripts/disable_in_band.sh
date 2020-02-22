@@ -1,4 +1,5 @@
 #!/bin/bash
+
 sw_id=`sudo docker ps | grep $1 | cut -d ' ' --f 1`
 echo $sw_iecho $sw_id
 

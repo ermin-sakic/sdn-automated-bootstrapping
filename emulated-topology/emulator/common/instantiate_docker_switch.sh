@@ -24,9 +24,10 @@ SWITCH_NUM="$1"
 ################################
 
 # Build images if executing first time
+
+sudo docker build -t vi_img -f ./emulator/docker-files/VectorInformatikConfDockerFile ./emulator/common
 sudo docker build -t switch_img -f ./emulator/docker-files/SwitchDockerFile ./emulator/common
 sudo docker build -t host_img -f ./emulator/docker-files/HostDockerFile ./emulator/common
-
 
 # Start switch containers with static persistent mac-addresses (required for ODL's SNMP wiring based on a static file) 
 # - if OpenFlow assumed, no SNMP or static MAC setting for management interface required

@@ -4,7 +4,7 @@
 ############################################################
 
 # Set the base image to use to Ubuntu
-FROM ubuntu:18.04
+FROM vi_img
 
 # Set the file maintainer (your name - the file's author)
 MAINTAINER Ermin Sakic
@@ -35,7 +35,6 @@ ADD ./add_c2c_flows.sh /add_c2c_flows.sh
 ADD ./dhclient.conf /etc/dhcp/dhclient.conf
 
 USER admin
-CMD /bin/bash
+#CMD ["/bin/bash"]
 
-CMD /bin/bash
-CMD bash -C '/switch_bootstrap.sh'; 'bash'
+

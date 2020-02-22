@@ -1,10 +1,8 @@
  #!/bin/bash
 
 ######### VARIABLEs ############
-
 # Number of switches in total
 no_sw=13
-
 ################################
 
 # Start containers with static persistent mac-addresses (required for ODL's SNMP wiring based on a static file) - if OpenFlow assumed, no SNMP or static MAC setting for management interface required

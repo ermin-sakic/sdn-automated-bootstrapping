@@ -13,18 +13,17 @@
 #
 #   Description: 
 #
-#   For some reason ovs-switches in a secure mode flush a flow table,
-#	i.e. preinstalled OF rules, when they establish a connection to the 
-#	controller for the first time. This behaviour is unwanted and leads
-#	to the problems regarding the bootsrapping procedure.
+#   For some reason the secure-mode configured ovs-switches flush a flow table,
+#   i.e. preinstalled OF rules, when they establish a connection to the 
+#   controller for the first time. This behaviour is unwanted and leads
+#   to the problems of broken OF connections.
 #
-#	The concrete reason could not be found. Ovs log files do
-#	not provide any valuable information regarding this problem.
-#	The OF traffic, analyzed via Wireshark, does not show that ODL
-#   sends a flow mod message to do this either.
-#	Therefore, this script is deployed on switches in order to track
-#	when a switch establishes a connection to the controller and then
-#	restores deleted initial rules.
+#   The concrete reason could not be found. Ovs log files do not provide any 
+#   valuable information regarding this problem.
+#   The OF traffic, analyzed via Wireshark, does not show that ODL sends 
+#   a flow mod message to do this either. Thus, this script is deployed on 
+#   switches in order to track when a switch establishes a connection to the 
+#   controller and then it restores deleted initial rules.
 #	
 ######################################################################
 

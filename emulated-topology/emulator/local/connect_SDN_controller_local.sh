@@ -1,5 +1,4 @@
 #!/bin/bash
-
 ######################################################################
 #       Filename: connect_SDN_controller_local.sh                    #
 #                                                                    #
@@ -15,8 +14,8 @@
 #   Description: 
 #
 #   The script creates a new network namespace (ns) for a controller,
-#	creates a new veth pair in the new ns, and connects the desired
-#	switch with the provided SDN controller.
+#   a new veth pair in the new ns  and connects the desired switch with 
+#   the provided SDN controller.
 #
 ######################################################################
 
@@ -26,6 +25,7 @@ controller_num=$2
 controller_ip=$3
 
 echo "Connecting ODL Controller SDNC-$controller_num with switch  $sw_name"
+
 # Checks if the controller network namespace exists
 if ip netns list | grep -q "ODL-Controller-SDNC-$controller_num"; then
 	echo "Network namespace ODL-Controller-SDNC-$controller_num already exists!"

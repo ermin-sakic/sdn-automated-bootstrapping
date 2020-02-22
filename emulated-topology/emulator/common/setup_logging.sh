@@ -37,5 +37,5 @@ for i in ${OF_STUFF[*]}; do
 	printf "Changing %s logging level of syslog to %s \n" $i $LOGGING_LEVEL
 	sudo docker exec -u root $SWITCH_ID ovs-appctl vlog/set $i:syslog:$LOGGING_LEVEL
 	printf "Changing %s logging level of file to %s \n" $i $LOGGING_LEVEL
-    sudo docker exec -u root $SWITCH_ID ovs-appctl vlog/set $i:file:$LOGGING_LEVEL
+        sudo docker exec -u root $SWITCH_ID ovs-appctl vlog/set $i:file:$LOGGING_LEVEL
 done

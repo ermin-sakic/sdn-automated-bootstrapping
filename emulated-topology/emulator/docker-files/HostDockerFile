@@ -1,10 +1,9 @@
-############################################################
-# Dockerfile to run SNMP Containers
+############################################################ # Dockerfile to run SNMP Containers
 # Based on Ubuntu Image
 ############################################################
 
 # Set the base image to use to Ubuntu
-FROM ubuntu:18.04
+FROM vi_img
 
 # Set the file maintainer (your name - the file's author)
 MAINTAINER Ermin Sakic
@@ -28,6 +27,8 @@ RUN service lldpd stop
 EXPOSE 161
 EXPOSE 162
 EXPOSE 18300
+
+#CMD ["/bin/bash"]
 
 #CMD bash
 #WORKDIR /home

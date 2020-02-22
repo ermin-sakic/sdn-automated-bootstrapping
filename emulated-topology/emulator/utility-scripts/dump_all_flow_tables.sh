@@ -18,6 +18,7 @@
 #   the flow-tables folder.
 #
 ######################################################################
+
 FOLDER="flow-tables"
 if [ ! -d "$FOLDER" ]; then
 	mkdir $FOLDER

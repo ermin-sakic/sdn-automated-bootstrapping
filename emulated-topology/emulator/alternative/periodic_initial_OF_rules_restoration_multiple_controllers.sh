@@ -13,12 +13,11 @@
 #
 #   Description: 
 #
-#   For some reason when in-band pre-disabled switches flush their 
-#	pre-installed table and for that reason they hinder the bootstrapping
-#
-#	Therefore we install the rules in a periodic fashion in order to
-#	prevent any unexpected connection breaks prior a full bootstrapped
-#	state.
+#   For some reason when in-band mode is pre-disabled, switches flush their 
+#   pre-installed table and for this reason they hinder the further
+#   bootstrapping. Thus, we install the rules in a periodic fashion in order 
+#   to prevent any unexpected connection breaks before the bootstrapping has
+#   been finished.
 #	
 ######################################################################
 
@@ -30,7 +29,7 @@ exec 1>$LOG_FILE 2>&1
 
 
 while true; do
-	 echo "Woke up, do it again."
+	 echo "Wake up and do it again."
 	 ovs-ofctl add-flows br100 /initial_OF_rules_multiple_controllers_setup --protocol=OpenFlow13
 	 sleep 1.5;
 done

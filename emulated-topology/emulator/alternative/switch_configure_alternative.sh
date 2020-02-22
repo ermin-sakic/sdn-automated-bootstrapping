@@ -13,7 +13,8 @@
 #
 #   Description: 
 #
-#   This script configures switches to be ready for the alternative (no RSTP) bootstrapping scheme. 
+#   This script configures switches to be ready for the alternative 
+#   (no RSTP) bootstrapping scheme. 
 ######################################################################
 
 # Switch name (number)
@@ -26,14 +27,15 @@ akka_gossip_tcp_port=$3
 
 # Start network services : OVS, LLDPD, SNMPD ...
 container_id=`docker inspect -f '{{.Id}}' sw_$sw_var`
+
 #echo "Restarting openvswitch-switch"
 sudo docker exec -u root $container_id service openvswitch-switch restart
+
 #echo "Starting lldpd"
 #sudo docker exec -u root $container_id lldpd -x & 
 
 # Initial setup of the OVS
-#sudo docker exec -u root $container_id ./ovs_run.sh
-## Add bridge 100 set to secure
+# Add bridge 100 set to secure
 echo "Adding OF bridge" 
 sudo docker exec -u root $container_id ovs-vsctl add-br br100
 # Secure fail mode configured
@@ -47,7 +49,7 @@ sudo docker exec -u root $container_id ovs-vsctl set bridge br100 protocols=Open
 echo "OF hidden rules disabled"
 sudo docker exec -u root $container_id ovs-vsctl set bridge br100 other-config:disable-in-band=true 
 
-# Disable STP initially 
+# Disable (R)STP initially 
 echo "Disable RSTP"
 sudo docker exec -u root $container_id ovs-vsctl set Bridge br100 rstp_enable=false
 #sudo docker exec -u root $container_id ovs-vsctl set Bridge br100 rstp_enable=true
@@ -59,9 +61,6 @@ for intname in $(sudo docker exec -u root $container_id ls /sys/class/net); do
 	case $intname in *veth*)
 		intnameclean=$(echo $intname|tr -d '\r')
 		echo "Virtual interface $intname added to br100"
-		#port_mac=$(sudo docker exec "$container_id" ip a | grep -A 1 "$intnameclean" | awk '/ether/ {print $2}')
-		#sudo docker exec -u root $container_id ovs-vsctl add-port br100 $intnameclean -- set Interface $intnameclean type=dpdk options:dpdk-devargs="class=eth,mac=$port_mac"
-		#sudo docker exec -u root $container_id ovs-vsctl add-port br100 $intnameclean -- set Interface $intnameclean type=dpdk options:dpdk-devargs=eth_afpacketl$intnameclean
 		sudo docker exec -u root $container_id ovs-vsctl add-port br100 $intnameclean 
 	
 		# Create 2 queues per port
@@ -69,33 +68,29 @@ for intname in $(sudo docker exec -u root $container_id ls /sys/class/net); do
 
 		# Configure tc policer for arp traffic
 		# Add ingress queue discipline
-		# sudo docker exec -u root $container_id tc qdisc add dev $intnameclean handle ffff: ingress
+		sudo docker exec -u root $container_id tc qdisc add dev $intnameclean handle ffff: ingress
 		# Set tc policer to allow only ARP request per second on each ingress qdisc
 		# Mimicing meters
-		#sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol arp u32 match u32 0x00000001 0x0000ffff at 4 police rate 0.5kbit burst 65b drop flowid :1
-		#sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol arp u32 match u32 0x00000001 0x0000ffff at 4 police rate 1.5kbit burst 65b drop flowid :1
+		sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol arp u32 match u32 0x00000001 0x0000ffff at 4 police rate 1.5kbit burst 65b drop flowid :1
 		# Set the same policer at each egress qdisc
-		#sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol arp u32 match u32 0x00000001 0x0000ffff at 4 police rate 0.5kbit burst 65b drop flowid :1
-		#sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol arp u32 match u32 0x00000001 0x0000ffff at 4 police rate 1.5kbit burst 65b drop flowid :1
+		sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol arp u32 match u32 0x00000001 0x0000ffff at 4 police rate 1.5kbit burst 65b drop flowid :1
  		# Limit ARP replies also that could create a storm 
-                 #sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol arp u32 match u32 0x00000002 0x0000ffff at 4 police rate 0.5kbit burst 65b drop flowid :1
-                 #sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol arp u32 match u32 0x00000002 0x0000ffff at 4 police rate 1.5kbit burst 65b drop flowid :1
-                 #sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol arp u32 match u32 0x00000002 0x0000ffff at 4 police rate 0.5kbit burst 65b drop flowid :1
-                 #sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol arp u32 match u32 0x00000002 0x0000ffff at 4 police rate 1.5kbit burst 65b drop flowid :1
-                 # Limit TCP SYN and SYN ACK that initially can create storm effects
-		 # Processing of the gossip port
-		 akka_dst_port_match_filter=$(printf "0x0000%04x" "$akka_gossip_tcp_port")
-		 echo "TCP SYN filtering on akka dst port $akka_dst_port_match_filter"
-		 akka_src_port_match_filter=$(printf "0x%04x0000" "$akka_gossip_tcp_port")
-		 echo "TCP SYN filtering on akka src port $akka_src_port_match_filter"
-                 # SYN packet matching
-                 #sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8 match u32 $akka_dst_port_match_filter 0x0000ffff at 20 match u32 0x00020000 0x000f0000 at 32 police rate 70kbit burst 800b drop flowid :1
+                sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol arp u32 match u32 0x00000002 0x0000ffff at 4 police rate 1.5kbit burst 65b drop flowid :1
+                sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol arp u32 match u32 0x00000002 0x0000ffff at 4 police rate 1.5kbit burst 65b drop flowid :1
+                # Limit TCP SYN and SYN ACK that initially can create storm effects
+		# Processing of the gossip port
+		akka_dst_port_match_filter=$(printf "0x0000%04x" "$akka_gossip_tcp_port")
+		echo "TCP SYN filtering on akka dst port $akka_dst_port_match_filter"
+		akka_src_port_match_filter=$(printf "0x%04x0000" "$akka_gossip_tcp_port")
+		echo "TCP SYN filtering on akka src port $akka_src_port_match_filter"
+                # SYN packet matching
+                sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8 match u32 $akka_dst_port_match_filter 0x0000ffff at 20 match u32 0x00020000 0x000f0000 at 32 police rate 70kbit burst 800b drop flowid :1
                  # SYN ACK matching
-                 #sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8  match u32 $akka_src_port_match_filter 0xffff0000 at 20 match u32 0x00120000 0x00ff0000 at 32 police rate 70kbit burst 800b drop flowid :1
+                 sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8  match u32 $akka_src_port_match_filter 0xffff0000 at 20 match u32 0x00120000 0x00ff0000 at 32 police rate 70kbit burst 800b drop flowid :1
                  # SYN packet matching
-                 #sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8  match u32 $akka_dst_port_match_filter 0x0000ffff at 20 match u32 0x00020000 0x000f0000 at 32 police rate 70kbit burst 800b drop flowid :1
+                 sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8  match u32 $akka_dst_port_match_filter 0x0000ffff at 20 match u32 0x00020000 0x000f0000 at 32 police rate 70kbit burst 800b drop flowid :1
                  # SYN ACK matching
-                 #sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8 match u32 $akka_src_port_match_filter 0xffff0000 at 20 match u32 0x00120000 0x00ff0000 at 32 police rate 70kbit burst 800b drop flowid :1
+                 sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8 match u32 $akka_src_port_match_filter 0xffff0000 at 20 match u32 0x00120000 0x00ff0000 at 32 police rate 70kbit burst 800b drop flowid :1
 
 	esac
 done
@@ -112,7 +107,7 @@ else
 fi
 
 CON_NUM=$2
-# PREINSTALLING INITIAL OF RULES
+# PREINSTALLED INITIAL OF RULES
 
 # Extracting br100 MAC address
 br100_MAC=$(sudo docker exec -u root $container_id ip a | grep -A 1 br100 | awk '/link/ {print $2}') 
@@ -151,26 +146,12 @@ echo "Restore script setup"
 sudo docker cp ./emulator/alternative/restore_initial_OF_rules.sh $container_id:/
 sudo docker exec -u root -d $container_id /restore_initial_OF_rules.sh
 
-# Initialize some host services
-#for ho_var in $(seq 1 $no_ho)
-#do
-#  echo "Host initiating Host services"
-#  container_id=`docker inspect -f '{{.Id}}' ho_$ho_var`
-#  sudo docker exec -u root $container_id lldpd -x &
-#  #sudo docker exec -u root $container_id service snmpd restart
-#done
-
 # Announce container IDs
 container_id=`docker inspect -f '{{.Id}}' sw_$sw_var`
 echo "Switch $sw_var has Docker ID: $container_id"
+
 # for one controller unnecessary
 #sudo docker exec -u root $container_id /periodicExecScript.sh 10.10.0.101 10.10.0.102 10.10.0.103
-
-#for ho_var in $(seq 1 $no_ho)
-#do
-# container_id=`docker inspect -f '{{.Id}}' ho_$ho_var`
-# echo "Host $ho_var has Docker ID: $container_id"
-#done
 
 # Starting dhclient on every instance
 container_id=`docker inspect -f '{{.Id}}' sw_$sw_var`
@@ -179,6 +160,8 @@ sudo docker exec -u root $container_id cp /sbin/dhclient /usr/sbin
 sudo docker exec -u root $container_id /usr/sbin/dhclient br100 &
 echo "dhclient started on br100"
 #sudo docker exec -u root $container_id dhclient br100 &
+
+# Restarting ssh
 sudo docker exec -u root $container_id service ssh restart &
 echo "SSH service restarted"
 

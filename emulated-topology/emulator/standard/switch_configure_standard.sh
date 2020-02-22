@@ -14,7 +14,7 @@
 #   Description: 
 #
 #   This script configures switches to be ready for the standard 
-#	(RSTP) bootstrapping scheme.
+#   ((R)STP) bootstrapping scheme.
 #
 ######################################################################
 
@@ -23,7 +23,7 @@ sw_var=$1
 
 container_id=`docker inspect -f '{{.Id}}' sw_$sw_var`
 
-# Start ovs built form source (ONLY USE TO RUN YOUR OVS VERSION)
+# Start ovs built from source (ONLY USE TO RUN YOUR OVS VERSION)
 #echo "Set up openvswitch built from source"
 #sudo docker exec -u root $container_id /ovs_STP_changed_run.sh
 
@@ -32,7 +32,6 @@ echo "Restarting openvswitch-switch"
 sudo docker exec -u root $container_id service openvswitch-switch restart
 echo "Starting lldpd"
 sudo docker exec -u root $container_id lldpd -x & 
-
 
 # Start manually swith if using your own version of OVS
 #sudo docker exec -u root $container_id ./ovs_run_changed_STP.sh
@@ -84,26 +83,12 @@ fi
 # sudo docker exec -u root $container_id ifconfig br100 10.10.0.$(($sw_var+1))
 # sudo docker exec -u root $container_id ovs-vsctl set-controller br100 tcp:10.10.0.101:6633 tcp:10.10.0.102:6633 tcp:10.10.0.103:6633
 
-# Initialize some host services
-#for ho_var in $(seq 1 $no_ho)
-#do
-#  echo "Host initiating Host services"
-#  container_id=`docker inspect -f '{{.Id}}' ho_$ho_var`
-#  sudo docker exec -u root $container_id lldpd -x &
-#  #sudo docker exec -u root $container_id service snmpd restart
-#done
-
 # Announce container IDs
 container_id=`docker inspect -f '{{.Id}}' sw_$sw_var`
 echo "Switch $sw_var has Docker ID: $container_id"
+
 # for one controller unnecessary
 #sudo docker exec -u root $container_id /periodicExecScript.sh 10.10.0.101 10.10.0.102 10.10.0.103
-
-#for ho_var in $(seq 1 $no_ho)
-#do
-# container_id=`docker inspect -f '{{.Id}}' ho_$ho_var`
-# echo "Host $ho_var has Docker ID: $container_id"
-#done
 
 # Starting dhclient on every instance
 container_id=`docker inspect -f '{{.Id}}' sw_$sw_var`
