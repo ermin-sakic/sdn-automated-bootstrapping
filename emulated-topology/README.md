@@ -1,11 +1,11 @@
 VirtuWind Network Emulator (OpenFlow) (SDN Network Emulator - Extension)
 ===============================
 
-This emulator is the extension of the emulator tha can be found in the following folders:
+This emulator is the extension of the emulator that can be found in the following folders:
 * emulated-topo-esxi-setup
 * emulated-topo-local
 
-The purpose of this extension is to allow easier configuration of the emulated network that is mainly used for testing (demonstrating) 
+The purpose of this extension is to allow easier configuration of the emulated networks that are mainly used for testing (demonstrating) 
 different SDN bootstrapping schemes. 
 
 #### Prerequisites
@@ -13,7 +13,10 @@ different SDN bootstrapping schemes.
   * Install docker from native repository as per official tutorial:
     https://docs.docker.com/engine/installation/linux/ubuntulinux/
   * Install openvswitch-vswitch on the host. Host kernel modules are required for vswitch related kernel calls ran in containers:
-    sudo apt-get install openvswitch-switch
+
+ ```bash
+    	sudo apt-get install openvswitch-switch
+ ```
     
 #### Operation
 
@@ -22,8 +25,8 @@ The starting point of this emulator is the `emulate_network.sh`. In other words,
 need to run this script. 
 
 ##### Configuration
-Prior running the emulator the first step would be to configure your setup.
-For that we provide a single configuration file `config`, where you can configure the emulator according to your needs.
+Prior to running the emulator, the first step would be to configure your setup.
+We provide a single configuration file `config` where you can configure the emulator according to your needs.
 In the following, the brief description of each configurable variable in the config file is given:
 
 * **TARGET** - here you configure whether you are going to run your emulator on the *REMOTE* or *LOCAL* setup. Under the *REMOTE* 
@@ -48,7 +51,7 @@ In the following, the brief description of each configurable variable in the con
  
 * **CON_IP_START** - is the variable that is valid only if you select LOCAL setup. Here you can specify the starting IP
  address of the SDN controllers. The specified address is assigned to the first controller. If you have specified more than 
- one SDN controller, than all subsequent controllers will be assigned with the IP addresses in the incremental fashion 
+ one SDN controller, then all subsequent controllers will be assigned with the IP addresses in the incremental fashion 
  (e.g. SDNC-1 -> 10.10.0.10; SDNC-2 -> 10.10.0.11; ...).
  
 * **AKKA_GOSSIP_PORT** - is the variable valid only if you select the alternative approach. It is used to configure tc policers
@@ -59,12 +62,14 @@ that prevent initial broadcast storms. It represents the excpected TCP port for 
  find some additional information on how to organize your new topology file.
  
 ##### Stop
+
  To stop the emulator and clean the setup, run the following command:
  ```bash
  sudo ./clean_up.sh
  ```
 
 #### Additional information
+
 Initial execution of the `emulate_network.sh` may take some time, because Docker needs to download some images and
 packages initially.
 
@@ -76,7 +81,7 @@ The Docker instances are configured to run:
   * SSH server
   * DHCP Client
   
-OVS is by default configured to execute dhclient on br100 (bridge 100) and to run in standalone mode with enabled STP/RSTP, hence acting as a standard L2 switch.
+OVS is by default configured to execute dhclient on br100 (bridge 100) and to run in standalone mode with enabled STP/RSTP, hence, acting as a standard L2 switch.
 Default user:password for SSH connections to Docker instances is admin:admin. 
 
 ##### ALTERNATIVE BOOTSTRAPPING SCHEME
@@ -104,6 +109,6 @@ For REMOTE testing see the setup on VMWare ESXi hypervisor.
 ##### Useful utility scripts and commands
 
 In the *emulator/utility-scripts* folder you can find many scripts that normally have a self-explanatory name or provide
-a brief description on how to use them inside the scripts themselves. These scripts provide various ways to extract or 
-monitor the executing emulator.
+a brief description on how to use them inside the scripts themselves. These scripts provide various ways to 
+monitor the running emulator.
 
