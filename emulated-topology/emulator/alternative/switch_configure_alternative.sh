@@ -89,12 +89,12 @@ for intname in $(sudo docker exec -u root $container_id ls /sys/class/net); do
 			echo "TCP SYN filtering on akka src port $akka_src_port_match_filter"
 			# SYN packet matching
 			sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8 match u32 $akka_dst_port_match_filter 0x0000ffff at 20 match u32 0x00020000 0x000f0000 at 32 police rate 70kbit burst 800b drop flowid :1
-			 # SYN ACK matching
-			 sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8  match u32 $akka_src_port_match_filter 0xffff0000 at 20 match u32 0x00120000 0x00ff0000 at 32 police rate 70kbit burst 800b drop flowid :1
-			 # SYN packet matching
-			 sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8  match u32 $akka_dst_port_match_filter 0x0000ffff at 20 match u32 0x00020000 0x000f0000 at 32 police rate 70kbit burst 800b drop flowid :1
-			 # SYN ACK matching
-			 sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8 match u32 $akka_src_port_match_filter 0xffff0000 at 20 match u32 0x00120000 0x00ff0000 at 32 police rate 70kbit burst 800b drop flowid :1
+			# SYN ACK matching
+			sudo docker exec -u root $container_id tc filter add dev $intnameclean parent ffff: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8  match u32 $akka_src_port_match_filter 0xffff0000 at 20 match u32 0x00120000 0x00ff0000 at 32 police rate 70kbit burst 800b drop flowid :1
+			# SYN packet matching
+			sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8  match u32 $akka_dst_port_match_filter 0x0000ffff at 20 match u32 0x00020000 0x000f0000 at 32 police rate 70kbit burst 800b drop flowid :1
+			# SYN ACK matching
+			sudo docker exec -u root $container_id tc filter add dev $intnameclean parent 1: protocol ip u32 match u32 0x45000000 0xff000000 at 0 match u32 0x00060000 0x00ff0000 at 8 match u32 $akka_src_port_match_filter 0xffff0000 at 20 match u32 0x00120000 0x00ff0000 at 32 police rate 70kbit burst 800b drop flowid :1
 	 	fi
 
 	esac
