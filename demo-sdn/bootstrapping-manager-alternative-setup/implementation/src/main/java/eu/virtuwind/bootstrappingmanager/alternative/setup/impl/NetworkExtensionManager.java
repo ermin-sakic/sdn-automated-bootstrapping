@@ -174,7 +174,7 @@ public class NetworkExtensionManager implements Runnable, PacketProcessingListen
                             updateTree(nodeConnectorId);
                             // TODO: OPTIMIZATION -> clean the special rule for this NodeConnector
                             /**
-                             *  It does not represent a problem, but it is will be a redundant rule.
+                             *  It does not represent a problem, but it will be a redundant rule.
                              *  Essentially, all special rules (in all switches) leading to the new discovered switch should be
                              *  removed.
                              */
@@ -233,7 +233,7 @@ public class NetworkExtensionManager implements Runnable, PacketProcessingListen
                             LOG.debug("CONNECTOR-W: isLinkDown-> {}", flowConnector.getState().isLinkDown());
 
                             if (flowConnector.getState().isLinkDown()) {
-                                // install special rules for this node connectors
+                                // install special rules for this node connector
                                 // because all links at the beginning, except the manual added one should be alive
                                 List<NodeConnector> nonFunctionalPorts = new ArrayList<>();
                                 nonFunctionalPorts.add(nodeConnector);
