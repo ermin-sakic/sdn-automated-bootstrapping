@@ -3,7 +3,7 @@
 ############################################################
 
 # Set the base image to use to Ubuntu
-FROM vi_img
+FROM ubuntu:18.04
 
 # Set the file maintainer (your name - the file's author)
 MAINTAINER Ermin Sakic
