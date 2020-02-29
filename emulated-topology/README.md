@@ -1,4 +1,4 @@
-Network Emulator (OpenFlow) (SDN Network Emulator - Extension)
+SDN Network Emulator (OpenFlow)
 ==============================
 
 The purpose of this emulator is to allow easier configuration of the emulated networks that are mainly used for testing (demonstrating) different SDN bootstrapping schemes. 
