@@ -4,9 +4,7 @@
 
 - OpenDaylight-compatible modules and exemplary network emulation for bootstrapping of a multi-controller OpenFlow-based in-band control plane.
 
-- Full details of the designs are provided in our ACM SIGCOMM SOSR 2020 publication titled: "Automated Bootstrapping of A Fault-Resilient In-Band Control Plane".
-
-- By default, the provided configuration realizes the introduced HHC approach (no reliance on RSTP) and it does so in a local environment, i.e., all controller instances and switches are instantiated in separate network namespaces in the local host. In case you want to run network emulation or the controller remotely, or you want to establish a cluster of controllers, adjust the configuration scripts in the ```sdn-demo``` and ```emulated-topology``` directory correspondingly.
+- Full details of the designs are provided in our [ACM SIGCOMM SOSR 2020 publication titled: "Automated Bootstrapping of A Fault-Resilient In-Band Control Plane"](https://www.researchgate.net/publication/339052342_Automated_Bootstrapping_of_A_Fault-Resilient_In-Band_Control_Plane).
 
 ---
 
@@ -28,9 +26,11 @@ Overview of the two approaches for bootstrapping of in-band control networks:
 |------------|-------------|
 | <img src="figures/hsw_seq.png" width="350"> | <img src="figures/hhc_seq.png" width="350"> |
 
-Details on both designs are presented in the attached ACM SOSR publication.
+Details on both designs are presented in the [attached ACM SOSR publication](https://www.researchgate.net/publication/339052342_Automated_Bootstrapping_of_A_Fault-Resilient_In-Band_Control_Plane).
 
 ## Usage
+
+By default, the provided configuration realizes the introduced HHC approach (no reliance on RSTP) and it does so in a local environment, i.e., all controller instances and switches are instantiated in separate network namespaces in the local host. In case you want to run network emulation or the controller remotely, or you want to establish a cluster of controllers, adjust the configuration scripts in the ```sdn-demo``` and ```emulated-topology``` directory correspondingly.
 
 ### Build Tools:
 - OpenJDK 8
