@@ -1,0 +1,40 @@
+############################################################
+# Dockerfile to run SNMP + NETCONF Containers
+# Based on Ubuntu Image
+############################################################
+
+# Set the base image to use to Ubuntu
+FROM ubuntu:18.04
+
+# Set the file maintainer (your name - the file's author)
+MAINTAINER Ermin Sakic
+
+# Enabling multiverse repository in sources.list
+RUN echo "deb http://de.archive.ubuntu.com/ubuntu/ bionic multiverse" >> /etc/apt/sources.list
+RUN echo "deb http://de.archive.ubuntu.com/ubuntu/ bionic-updates multiverse" >> /etc/apt/sources.list
+
+# Updating repositories and installing necessary packages
+RUN apt-get update; apt-get install apt-utils netcat sudo rsync tcpdump ethtool net-tools sshpass openjdk-8-jre isc-dhcp-client lldpd ssh openssh-server openvswitch-switch python net-tools python3 python3-networkx python3-numpy iproute2 vim tcpdump inetutils-ping -y;
+RUN DEBIAN_FRONTEND=noninteractive apt-get install wireshark -y
+
+#ADD ./bootstrap.sh /bootstrap.sh
+
+# Stopping initial LLDPD service (started with additional parameters in bootstrap.sh
+RUN service lldpd stop
+
+# Expose ports to be accessed by hosts
+EXPOSE 161
+EXPOSE 162
+EXPOSE 18300
+
+RUN useradd -m admin && echo "admin:admin" | chpasswd && adduser admin sudo
+RUN echo "root:root" | sudo chpasswd
+
+ADD ./periodicExecScript.sh /periodicExecScript.sh
+ADD ./add_c2c_flows.sh /add_c2c_flows.sh
+ADD ./dhclient.conf /etc/dhcp/dhclient.conf
+
+USER admin
+#CMD ["/bin/bash"]
+
+

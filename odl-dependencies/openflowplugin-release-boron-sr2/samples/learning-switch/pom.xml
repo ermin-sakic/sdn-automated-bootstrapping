@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.opendaylight.openflowplugin</groupId>
+        <artifactId>openflowplugin-parent</artifactId>
+        <version>0.3.2-Boron-SR2</version>
+        <relativePath>../../parent</relativePath>
+    </parent>
+
+    <artifactId>learning-switch</artifactId>
+    <packaging>bundle</packaging>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Embed-Transitive>
+                            false
+                        </Embed-Transitive>
+                        <Bundle-Activator>
+                            org.opendaylight.openflowplugin.learningswitch.Activator
+                        </Bundle-Activator>
+                    </instructions>
+                    <manifestLocation>${project.build.directory}/META-INF</manifestLocation>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.opendaylight.openflowplugin.model</groupId>
+            <artifactId>model-flow-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.opendaylight.openflowplugin.model</groupId>
+            <artifactId>model-flow-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.opendaylight.controller.model</groupId>
+            <artifactId>model-inventory</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.opendaylight.controller</groupId>
+            <artifactId>sal-binding-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.opendaylight.mdsal</groupId>
+            <artifactId>yang-binding</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.opendaylight.openflowplugin</groupId>
+            <artifactId>openflowplugin-api</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.osgi</groupId>
+          <artifactId>org.osgi.core</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
+

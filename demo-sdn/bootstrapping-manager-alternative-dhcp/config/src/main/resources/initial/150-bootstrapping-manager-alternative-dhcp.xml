@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<snapshot>
+  <configuration>
+    <data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+      <modules xmlns="urn:opendaylight:params:xml:ns:yang:controller:config">
+
+        <module>
+          <type xmlns:prefix="urn:eu:virtuwind:bootstrappingmanager:alternative:dhcp:impl">prefix:example-lease-manager
+          </type>
+          <name>example-lease-manager</name>
+          <!--<ip>192.168.0.1</ip>-->
+        </module>
+
+        <module>
+          <type
+              xmlns:prefix="urn:eu:virtuwind:bootstrappingmanager:alternative:dhcp:impl">prefix:dhcp</type>
+          <name>dhcp-server</name>
+
+          <!-- Example of hardcoded dhcp option. This is Time-server option with hex encoded IP value-->
+          <default-option>
+            <id>4</id>
+            <value>0a00021e</value>
+            <scope>DHCPOFFER</scope>
+          </default-option>-->
+
+          <!--<network-interface>veth20</network-interface>-->
+
+          <lease-manager>
+            <type xmlns:prefix="urn:eu:virtuwind:bootstrappingmanager:alternative:dhcp:impl">prefix:dhcp-lease-manager</type>
+            <name>example-lease-manager</name>
+          </lease-manager>
+          <data-broker>
+            <type xmlns:binding="urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding">binding:binding-async-data-broker</type>
+            <name>binding-data-broker</name>
+          </data-broker>
+          <rpc-registry>
+            <type xmlns:binding="urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding">binding:binding-rpc-registry</type>
+            <name>binding-rpc-broker</name>
+          </rpc-registry>
+          <worker-thread-group>
+            <type xmlns:prefix="urn:opendaylight:params:xml:ns:yang:controller:netty">prefix:netty-threadgroup</type>
+            <name>global-worker-group</name>
+          </worker-thread-group>
+
+          <entity-ownership-service>
+            <type xmlns:entity-ownership="urn:opendaylight:params:xml:ns:yang:controller:md:sal:core:spi:entity-ownership-service">entity-ownership:entity-ownership-service</type>
+            <name>entity-ownership-service</name>
+          </entity-ownership-service>
+
+          <dhcp-server-config>
+            <dhcp-ranges>
+              <dhcp-addr-range-begin>10.10.0.30</dhcp-addr-range-begin>
+              <dhcp-addr-range-end>10.10.0.59</dhcp-addr-range-end>
+            </dhcp-ranges>
+            <bind-dhcp-interface>
+              <interface-name>veth-SDNC-1-c</interface-name>
+            </bind-dhcp-interface>
+            <dhcp-config-mode>auto</dhcp-config-mode>
+            <dhcp-duplication-protection>false</dhcp-duplication-protection>
+          </dhcp-server-config>
+
+        </module>
+      </modules>
+
+
+      <services xmlns="urn:opendaylight:params:xml:ns:yang:controller:config">
+        <service>
+          <type xmlns:prefix="urn:eu:virtuwind:bootstrappingmanager:alternative:dhcp:impl">prefix:dhcp-lease-manager</type>
+          <instance>
+            <name>example-lease-manager</name>
+            <provider>/modules/module[type='example-lease-manager'][name='example-lease-manager']</provider>
+          </instance>
+        </service>
+      </services>
+    </data>
+  </configuration>
+
+  <required-capabilities>
+    <capability>urn:eu:virtuwind:registryhandler:impl?module=registryhandler-impl&amp;revision=2016-10-17</capability>
+    <!--<capability>urn:eu:virtuwind:bootstrappingmanager:setup:impl?module=bootstrappingmanager-setup-impl&amp;revision=2015-07-22</capability>-->
+    <capability>urn:eu:virtuwind:bootstrappingmanager:alternative:setup:impl?module=bootstrappingmanager-alternative-setup-impl&amp;revision=2015-07-22</capability>
+    <!--<capability>urn:eu:virtuwind:bootstrappingmanager:dhcp:impl?module=bootstrappingmanager-dhcp-impl&amp;revision=2016-12-10</capability>-->
+    <capability>urn:eu:virtuwind:bootstrappingmanager:alternative:dhcp:impl?module=bootstrappingmanager-alternative-dhcp-impl&amp;revision=2016-12-10</capability>
+    <capability>urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding?module=opendaylight-md-sal-binding&amp;revision=2013-10-28</capability>
+    <capability>urn:opendaylight:params:xml:ns:yang:openflowplugin:extension:api?module=openflowplugin-extension-registry&amp;revision=2015-04-25</capability>
+  </required-capabilities>
+</snapshot>

@@ -1,0 +1,11 @@
+module resourcemanager {
+    yang-version 1;
+    namespace "urn:eu:virtuwind:resourcemanager";
+    prefix resourcemanager;
+
+    description "Resource Manger configuration";
+
+    revision "2016-10-17" {
+        description "Initial version of resourcemanager interfaces";
+    }
+}

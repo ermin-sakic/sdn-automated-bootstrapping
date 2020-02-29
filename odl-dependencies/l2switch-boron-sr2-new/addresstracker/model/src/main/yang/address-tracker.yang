@@ -1,0 +1,69 @@
+module address-tracker {
+  yang-version 1;
+  namespace "urn:opendaylight:address-tracker";
+  prefix address-tracker;
+
+  import yang-ext {
+    prefix ext;
+    revision-date "2013-07-09";
+  }
+  import ietf-inet-types {
+    prefix inet;
+    revision-date 2013-07-15;
+  }
+  import ietf-yang-types {
+    prefix yang;
+    revision-date 2013-07-15;
+  }
+  import opendaylight-inventory {
+    prefix inv;
+    revision-date 2013-08-19;
+  }
+  import ethernet-packet {
+    prefix ethernet;
+    revision-date 2014-05-28;
+  }
+
+  description
+    "Address Tracker Data Model";
+
+  revision 2014-06-17 {
+    description
+      "Address Tracker module draft.";
+  }
+
+  grouping address-node-connector {
+    list addresses {
+      key id;
+      leaf id {
+        description "A 64-bit key for this observation. This is opaque and should not be interpreted.";
+        type uint64;
+      }
+      leaf mac {
+        type yang:mac-address;
+        description "MAC address";
+      }
+      leaf ip {
+        type inet:ip-address;
+        description "IPv4 or IPv6 address";
+      }
+      leaf vlan {
+        type ethernet:vlan-id;
+        description "VLAN id";
+      }
+      leaf first-seen {
+        type int64;
+        description "Timestamp (number of ms since January 1, 1970, 00:00:00 GMT) of observing this address for the first time";
+      }
+      leaf last-seen {
+        type int64;
+        description "The most recent timestamp (tnumber of ms since January 1, 1970, 00:00:00 GMT) of observing this address";
+      }
+    }
+  }
+
+  augment "/inv:nodes/inv:node/inv:node-connector" {
+    ext:augment-identifier "address-capable-node-connector";
+    uses address-node-connector;
+  }
+}

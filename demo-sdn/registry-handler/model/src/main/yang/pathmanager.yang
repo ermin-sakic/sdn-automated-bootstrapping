@@ -1,0 +1,51 @@
+module pathmanager {
+    yang-version 1;
+    namespace "urn:eu:virtuwind:registryhandler:pathmanager";
+    prefix pathmanager;
+    import yang-ext {prefix ext; revision-date "2013-07-09";}
+    import ietf-yang-types { prefix yang; revision-date 2010-09-24; }
+    description "Path Manager";
+    revision "2016-12-23" {
+        description "Initial version.";
+    }
+
+    container path-manager-info {
+        description "Data for the path manager";
+        list queue-edge-info {
+            description "Data stored for a queue-link edge";
+            key edge-id;
+
+            leaf edge-id {
+                  type string;
+                  description "Unique key for the link-Q, defined by its physical link ID and Q priority as in linkname:prioId.";
+            }
+
+            leaf max-burst {
+                type uint32;
+                description "Maximum allowed burst in byte";
+            }
+
+            leaf current-burst {
+                type uint32;
+                description "Current burst used";
+            }
+
+            leaf max-rate {
+                type uint64;
+                description "Maximum allowed rate in byte/s";
+            }
+
+            leaf current-rate {
+                type uint64;
+                description "Current rate used";
+            }
+
+            leaf max-delay {
+                type decimal64 {
+                    fraction-digits 6;
+                }
+                description "Maximum delay (in ms) that will ever occur at this queue";
+            }
+        }
+    }
+}

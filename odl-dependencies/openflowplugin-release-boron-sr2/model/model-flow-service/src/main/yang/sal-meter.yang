@@ -1,0 +1,111 @@
+module sal-meter {
+    namespace "urn:opendaylight:meter:service";
+    prefix meter;
+
+    import opendaylight-inventory {prefix inv;revision-date "2013-08-19";}
+    import opendaylight-meter-types {prefix meter-type;revision-date "2013-09-18";}
+    import flow-capable-transaction {prefix tr; revision-date "2015-03-04";}
+
+    description "Openflow meter management.";
+
+    revision "2013-09-18" {
+        description "Initial revision of meter service";
+    }        
+    
+    grouping node-meter {
+        description "Basic openflow meter structure suitable for rpc input (contains node-context-ref)";
+        
+        uses "inv:node-context-ref";
+        uses meter-type:meter;
+    }
+
+    /** Base configuration structure **/
+    grouping meter-update {
+        description "DataStore aware update openflow meter structure suitable for rpc input (contains node-context-ref)";
+        uses "inv:node-context-ref";
+
+        container original-meter {
+            uses meter-type:meter;
+        }
+        container updated-meter {
+            uses meter-type:meter;
+        }
+    }
+
+    rpc add-meter {
+        description "Adding meter to openflow device.";
+        input {
+            uses tr:transaction-metadata;            
+            leaf meter-ref {
+                type meter-type:meter-ref;
+            }
+            uses node-meter;            
+        }
+        output {
+            uses tr:transaction-aware;
+        }
+    }
+
+    rpc remove-meter {
+        description "Removing metere from openflow device.";
+        input {
+            uses tr:transaction-metadata;            
+            leaf meter-ref {
+                type meter-type:meter-ref;
+            }
+            
+            uses node-meter;                       
+        }
+        output {
+            uses tr:transaction-aware;
+        }
+    }
+
+    rpc update-meter {
+        description "Updating meter on openflow device.";
+        input {
+            uses tr:transaction-metadata;            
+            leaf meter-ref {
+                type meter-type:meter-ref;
+            }
+            
+            uses meter-update;                       
+        }
+        output {
+            uses tr:transaction-aware;
+        }
+    }
+        
+    notification meter-added {
+        status deprecated;
+
+        uses tr:transaction-metadata;
+        leaf meter-ref {
+            type meter-type:meter-ref;
+        }
+        uses node-meter;
+        uses tr:transaction-aware;
+    }
+
+    notification meter-updated {
+        status deprecated;
+
+        uses tr:transaction-metadata;
+        leaf meter-ref {
+            type meter-type:meter-ref;
+        }
+        uses node-meter;
+        uses tr:transaction-aware;
+    }
+
+    notification meter-removed {
+        status deprecated;
+
+        uses tr:transaction-metadata;
+        leaf meter-ref {
+            type meter-type:meter-ref;
+        }
+        uses node-meter;
+        uses tr:transaction-aware;
+    }
+}

@@ -1,0 +1,35 @@
+############################################################ # Dockerfile to run SNMP Containers
+# Based on Ubuntu Image
+############################################################
+
+# Set the base image to use to Ubuntu
+FROM ubuntu:18.04
+
+# Set the file maintainer (your name - the file's author)
+MAINTAINER Ermin Sakic
+
+# Enabling multiverse repository in sources.list
+RUN echo "deb http://de.archive.ubuntu.com/ubuntu/ bionic multiverse" >> /etc/apt/sources.list
+RUN echo "deb http://de.archive.ubuntu.com/ubuntu/ bionic-updates multiverse" >> /etc/apt/sources.list
+
+# Updating repositories and installing necessary packages
+RUN apt-get update; apt-get install x11-apps sudo sudo iperf3 isc-dhcp-client vlc ssh openssh-server openjdk-8-jre ethtool net-tools lldpd net-tools vim tcpdump inetutils-ping -y;
+
+RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
+
+USER docker
+CMD /bin/bash
+
+# Stopping initial LLDPD service (started with additional parameters in bootstrap.sh
+RUN service lldpd stop
+
+# Expose ports to be accessed by hosts
+EXPOSE 161
+EXPOSE 162
+EXPOSE 18300
+
+#CMD ["/bin/bash"]
+
+#CMD bash
+#WORKDIR /home
+#CMD bash -C '../bootstrap.sh'; 'bash'

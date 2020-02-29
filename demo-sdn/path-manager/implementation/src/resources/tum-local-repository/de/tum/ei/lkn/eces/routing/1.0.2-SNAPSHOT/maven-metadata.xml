@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>de.tum.ei.lkn.eces</groupId>
+  <artifactId>routing</artifactId>
+  <version>1.0.2-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20170521.102436</timestamp>
+      <buildNumber>1</buildNumber>
+    </snapshot>
+    <lastUpdated>20170521102436</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>1.0.2-20170521.102436-1</value>
+        <updated>20170521102436</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>1.0.2-20170521.102436-1</value>
+        <updated>20170521102436</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <classifier>tests</classifier>
+        <extension>jar</extension>
+        <value>1.0.2-20170521.102436-1</value>
+        <updated>20170521102436</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>

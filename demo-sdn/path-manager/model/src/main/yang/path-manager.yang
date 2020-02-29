@@ -1,0 +1,427 @@
+module path-manager {
+    yang-version 1;
+    namespace "urn:eu:virtuwind:pathmanager";
+    prefix ref;
+
+    description
+      "This model defines the Path Manager REST APIs";
+
+    revision "2016-10-17" {
+        description "Initial revision.";
+    }
+
+    import opendaylight-inventory {
+        prefix inv;
+        revision-date 2013-08-19;
+    }
+
+    import opendaylight-match-types {
+        prefix mt;
+        revision-date 2013-10-26;
+    }
+
+    import ietf-inet-types { prefix inet; }
+
+    /*
+     * RPC definitions
+     */
+     rpc embed-real-time {
+         description "Embeds a flow with real-time requirements.";
+
+         input {
+             leaf source-node-id {
+                 description "Source switch of the flow.";
+                 type inv:node-id;
+             }
+
+             leaf source-node-connector-id {
+                 description "Connector of the source end host on the source switch.
+                              (null for switch-to-switch flows)";
+                 type inv:node-connector-id;
+             }
+
+             leaf destination-node-id {
+                 description "Destination switch of the flow.";
+                 type inv:node-id;
+             }
+
+             leaf destination-node-connector-id {
+                 description "Connector of the destination end host on the destination switch.
+                              (null for switch-to-switch flows).";
+                 type inv:node-connector-id;
+             }
+
+            container matching {
+                description "Matching structure.";
+                uses mt:match;
+            }
+
+            leaf rate {
+                description "Sustainable rate of the flow in B/s.";
+                type decimal64 {
+                    fraction-digits 2;
+                }
+            }
+
+            leaf burst {
+                description "Maximum burstiness of the flow in bytes.";
+                type decimal64 {
+                    fraction-digits 2;
+                }
+            }
+
+            leaf max-packet-size {
+                description "Maximum packet size of the flow in bytes.
+                             Note that this *should* include the interframe
+                             gap between Ethernet frames.
+                             If unknown, specify 1542, i.e. the maximum
+                             Ethernet frame size.";
+                type decimal64 {
+                    fraction-digits 2;
+                }
+            }
+
+            leaf max-delay {
+                description "Maximum end-to-end delay packets of the flow should
+                             experience (in seconds).";
+                type decimal64 {
+                    fraction-digits 2;
+                }
+            }
+
+            leaf resilience {
+                description "true if the flow has to be resilient to a single
+                             component (link/node) failure. If false, a single
+                             component failure might disrupt the connection.
+                             Resilience to failures requires more resources and
+                             setting true hence leads to higher rejection rate.";
+                type boolean;
+            }
+
+            list intermediate-nodes {
+                description "Ordered list of functions through which the flow has to
+                             be routed. Each element of the list is an array of
+                             candidate Nodes. One Node of each list element will be
+                             chosen. Increasing the amount of candidate Nodes for
+                             the different functions increases the probability of
+                             acceptance of the flow.";
+                list candidates {
+                    leaf node {
+                        type inv:node-id;
+                    }
+                }
+            }
+
+            list delays {
+                description "List following the same structure as 'intermediateNodes'
+                             and defining the worst-case processing delays (in seconds)
+                             of the Nodes specified in 'intermediateNodes'.";
+                list candidates {
+                    leaf delay {
+                        type decimal64 {
+                            fraction-digits 2;
+                        }
+                    }
+                }
+            }
+
+             leaf meter-id {
+                 description "Id of the flow meter that the resource manager should
+                              update.";
+                 type uint32;
+             }
+         }
+
+        output {
+            leaf embedding-id {
+                description "an embedding ID.
+                             -1 if no path was found/if an error occurred (e.g., unknown nodes).";
+                type int64;
+            }
+        }
+     }
+
+    rpc embed-best-effort {
+        description
+            "Embeds a best-effort flow.";
+
+        input {
+            leaf source-node-id {
+                description "Source switch of the flow.";
+                type inv:node-id;
+            }
+
+            leaf source-node-connector-id {
+                description "Connector of the source end host on the source switch.
+                             (null for switch-to-switch flows)";
+                type inv:node-connector-id;
+            }
+
+            leaf destination-node-id {
+                description "Destination switch of the flow.";
+                type inv:node-id;
+            }
+
+            leaf destination-node-connector-id {
+                description "Connector of the destination end host on the destination switch.
+                             (null for switch-to-switch flows).";
+                type inv:node-connector-id;
+            }
+
+            container matching {
+                description "Matching structure.";
+                uses mt:match;
+            }
+
+            leaf meter-id {
+                description "Id of the flow meter that the resource manager should
+                             update.";
+                type uint32;
+            }
+        }
+
+        output {
+            leaf embedding-id {
+                description "an embedding ID.
+                             -1 if no path was found/if an error occurred (e.g., unknown nodes).";
+                type int64;
+            }
+        }
+    }
+
+    rpc embed-disjoint-best-effort {
+        description
+            "Embeds disjoint best-effort flows from one source to different destinations.";
+
+        input {
+            leaf source-node-id {
+                description "Source switch of the flow.";
+                type inv:node-id;
+            }
+
+            leaf source-node-connector-id {
+                description "Connector of the source end host on the source switch.
+                             (null for switch-to-switch flows)";
+                type inv:node-connector-id;
+            }
+
+            list destinations {
+                description "Destination switches.";
+                leaf destination-node {
+                    type inv:node-id;
+                }
+            }
+
+            list destination-connectors {
+                description "Connector of the destination end hosts on the destination switches.";
+                leaf destination-node-connector-id {
+                    type inv:node-connector-id;
+                }
+            }
+
+            container matching {
+                description "Matching structure.";
+                uses mt:match;
+            }
+
+            leaf meter-id {
+                description "Id of the flow meter that the resource manager should
+                             update.";
+                type uint32;
+            }
+        }
+
+        output {
+            leaf embedding-id {
+                description "an embedding ID.
+                             -1 if no path was found/if an error occurred (e.g., unknown nodes).";
+                type int64;
+            }
+        }
+    }
+
+    rpc remove-flow {
+        description
+            "Removes a previously embedded flow.";
+
+        input {
+            leaf embedding-id {
+                description "ID of the previously embedded path.";
+                type int64;
+            }
+        }
+
+        output {
+            leaf success {
+                description "true/false based on success/failure";
+                type boolean;
+            }
+        }
+    }
+
+    rpc find-best-effort {
+        description
+            "Finds a best-effort path.";
+
+        input {
+            leaf source-node-id {
+                description "Source switch of the flow.";
+                type inv:node-id;
+            }
+
+            leaf destination-node-id {
+                description "Destination switch of the flow.";
+                type inv:node-id;
+            }
+        }
+
+        output {
+            leaf path {
+                description "Found path";
+                type string;
+            }
+        }
+    }
+
+    rpc find-resilient-best-effort {
+        description
+            "Finds two disjoint best-effort paths.";
+
+        input {
+            leaf source-node-id {
+                description "Source switch of the flow.";
+                type inv:node-id;
+            }
+
+            leaf destination-node-id {
+                description "Destination switch of the flow.";
+                type inv:node-id;
+            }
+        }
+
+        output {
+            leaf paths {
+                description "Found paths";
+                type string;
+            }
+        }
+    }
+
+    rpc find-disjoint-best-effort {
+        description
+            "Finds disjoint best-effort paths from one source to different destinations.";
+
+        input {
+            leaf source-node-id {
+                description "Source switch of the flow.";
+                type inv:node-id;
+            }
+
+            list destinations {
+                description "Destination switches.";
+                leaf destination-node {
+                    type inv:node-id;
+                }
+            }
+        }
+
+        output {
+            leaf paths {
+                description "Found paths";
+                type string;
+            }
+        }
+    }
+
+     rpc find-real-time {
+         description "Finds a path with real-time requirements.";
+
+         input {
+             leaf source-node-id {
+                 description "Source switch of the flow.";
+                 type inv:node-id;
+             }
+
+             leaf destination-node-id {
+                 description "Destination switch of the flow.";
+                 type inv:node-id;
+             }
+
+            leaf rate {
+                description "Sustainable rate of the flow in B/s.";
+                type decimal64 {
+                    fraction-digits 2;
+                }
+            }
+
+            leaf burst {
+                description "Maximum burstiness of the flow in bytes.";
+                type decimal64 {
+                    fraction-digits 2;
+                }
+            }
+
+            leaf max-packet-size {
+                description "Maximum packet size of the flow in bytes.
+                             Note that this *should* include the interframe
+                             gap between Ethernet frames.
+                             If unknown, specify 1542, i.e. the maximum
+                             Ethernet frame size.";
+                type decimal64 {
+                    fraction-digits 2;
+                }
+            }
+
+            leaf max-delay {
+                description "Maximum end-to-end delay packets of the flow should
+                             experience (in seconds).";
+                type decimal64 {
+                    fraction-digits 2;
+                }
+            }
+
+            leaf resilience {
+                description "true if the flow has to be resilient to a single
+                             component (link/node) failure. If false, a single
+                             component failure might disrupt the connection.
+                             Resilience to failures requires more resources and
+                             setting true hence leads to higher rejection rate.";
+                type boolean;
+            }
+
+            list intermediate-nodes {
+                description "Ordered list of functions through which the flow has to
+                             be routed. Each element of the list is an array of
+                             candidate Nodes. One Node of each list element will be
+                             chosen. Increasing the amount of candidate Nodes for
+                             the different functions increases the probability of
+                             acceptance of the flow.";
+                list candidates {
+                    leaf node {
+                        type inv:node-id;
+                    }
+                }
+            }
+
+            list delays {
+                description "List following the same structure as 'intermediateNodes'
+                             and defining the worst-case processing delays (in seconds)
+                             of the Nodes specified in 'intermediateNodes'.";
+                list candidates {
+                    leaf delay {
+                        type decimal64 {
+                            fraction-digits 2;
+                        }
+                    }
+                }
+            }
+         }
+
+        output {
+            leaf result {
+                description "Found path(s)";
+                type string;
+            }
+        }
+     }
+}

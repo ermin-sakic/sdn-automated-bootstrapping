@@ -1,0 +1,38 @@
+module nbi-impl {
+    yang-version 1;
+    namespace "urn:eu:virtuwind:nbi:impl";
+    prefix "nbi-impl";
+
+    import config { prefix config; revision-date 2013-04-05; }
+    import opendaylight-md-sal-binding { prefix mdsal; revision-date 2013-10-28; }
+
+    description
+        "Application Interface Implementation";
+
+    revision "2016-07-04" {
+        description
+        "Initial revision.";
+    }
+
+    identity nbi-impl {
+        base config:module-type;
+
+        config:java-name-prefix nbi;
+    }
+
+    augment "/config:modules/config:module/config:configuration" {
+        case nbi-impl {
+            when "/config:modules/config:module/config:type = 'nbi-impl'";
+
+            container rpc-registry {
+                uses config:service-ref {
+                    refine type {
+                        mandatory true;
+
+                        config:required-identity mdsal:binding-rpc-registry;
+                    }
+                }
+            }
+        }
+    }
+}

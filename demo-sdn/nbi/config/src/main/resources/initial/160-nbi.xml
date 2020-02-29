@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<snapshot>
+	<configuration>
+		<data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+				<modules xmlns="urn:opendaylight:params:xml:ns:yang:controller:config">
+				<module>
+					<type
+							xmlns:prefix="urn:eu:virtuwind:nbi:impl">prefix:nbi-impl</type>
+					<name>nbi-impl</name>
+					<rpc-registry>
+						<type xmlns:binding="urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding">binding:binding-rpc-registry</type>
+						<name>binding-rpc-broker</name>
+					</rpc-registry>
+				</module>
+			</modules>
+		</data>
+	</configuration>
+
+	<required-capabilities>
+		<capability>urn:eu:virtuwind:nbi:impl?module=nbi-impl&amp;revision=2016-07-04</capability>
+		<capability>urn:opendaylight:params:xml:ns:yang:openflow:common:config:impl?module=openflow-provider-impl&amp;revision=2014-03-26</capability>
+	</required-capabilities>
+</snapshot>

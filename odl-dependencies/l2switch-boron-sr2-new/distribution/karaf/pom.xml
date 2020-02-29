@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.opendaylight.odlparent</groupId>
+    <artifactId>karaf-parent</artifactId>
+    <version>1.7.2-Boron-SR2</version>
+    <relativePath></relativePath>
+  </parent>
+  <artifactId>distribution-karaf</artifactId>
+  <groupId>org.opendaylight.l2switch</groupId>
+  <version>0.4.2-Boron-SR2</version>
+  <packaging>pom</packaging>
+  <prerequisites>
+    <maven>3.0</maven>
+  </prerequisites>
+
+  <properties>
+    <karaf.localFeature>odl-l2switch-switch-ui</karaf.localFeature>
+  </properties>
+
+  <dependencies>
+    <!-- Basic Karaf dependencies -->
+    <dependency>
+      <groupId>org.apache.karaf.features</groupId>
+      <artifactId>framework</artifactId>
+      <version>${karaf.version}</version>
+      <type>kar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.l2switch</groupId>
+      <artifactId>features-l2switch</artifactId>
+      <version>${project.version}</version>
+      <classifier>features</classifier>
+      <type>xml</type>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- DO NOT deploy the karaf artifact -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <scm>
+    <connection>scm:git:ssh://git.opendaylight.org:29418/l2switch.git</connection>
+    <developerConnection>scm:git:ssh://git.opendaylight.org:29418/l2switch.git</developerConnection>
+    <tag>HEAD</tag>
+    <url>https://git.opendaylight.org/gerrit/gitweb?p=l2switch.git;a=summary</url>
+  </scm>
+</project>

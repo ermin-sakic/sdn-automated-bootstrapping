@@ -1,0 +1,69 @@
+######################################################################
+#       Filename: config                                             #
+#                                                                    #
+#       Author: Mirza Avdic                                          #
+#       Date:  Apr 13, 2018                                          #
+#                                                                    #
+######################################################################  
+
+######################################################################
+#
+#   Filename: config
+#
+#   Description: 
+#
+#   This file is used to  configure VirtuWind Emulator used for 
+#   bootstrapping evaluation and testing purposes.
+#
+#   Before starting to use emulator please first read README file.
+#
+######################################################################
+
+
+# Configuring LOCAL or REMOTE emulator setup
+# Currently valid values: LOCAL and REMOTE
+TARGET="LOCAL"
+#TARGET="REMOTE"
+
+# Initial configuration of switches based on
+# the used bootstrapping scheme.
+# Currently valid values:
+# STANDARD -> with RSTP, standalone, ...
+# ALTERNATIVE -> no RSTP, secure mode, ...
+BOOTSTRAPPING="ALTERNATIVE"
+
+# Configuring SDN controllers
+
+# Number of controllers that will be instantiated
+# Valid values: 1,3,5,...
+# Currently max number of supported controllers in
+# the cluster is 3
+CON_NUM=1
+# Switch number to which the controller will be connected
+# Please look at the topologies folder for more information
+# about the valid positons for the controllers
+CON_POSITION=(1)
+
+# Controllers' IP addresses starting address 
+# Used for LOCAL use of the emulator, since
+# we have to configure IP addresses of the
+# network namespaces that are used.
+# For remote testing this parameter can be 
+# ignored
+CON_IP_START="10.10.0.10"
+
+# TCP port for the inter-controller gossip akka protocol
+# It is valid only when  BOOTSTRAPPING="ALTERNATIVE"
+# It is used to create an initial rule that matches this traffic type
+# and to create appropriate tc filters for TCP SYN and SYN/ACK traffic
+# It has to match the value specified in the controller akka.conf file
+# If you do not intend to change its value in the akka.conf then you can
+# simply ignore the following line
+AKKA_GOSSIP_PORT="2550"
+
+
+# Select the desired topology from the topology folder
+# Please look at the topology folder for the visual
+# information on the selected topology
+TOPOLOGY="line8"
+
