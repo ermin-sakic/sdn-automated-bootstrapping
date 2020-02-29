@@ -1,12 +1,7 @@
-VirtuWind Network Emulator (OpenFlow) (SDN Network Emulator - Extension)
-===============================
+Network Emulator (OpenFlow) (SDN Network Emulator - Extension)
+==============================
 
-This emulator is the extension of the emulator that can be found in the following folders:
-* emulated-topo-esxi-setup
-* emulated-topo-local
-
-The purpose of this extension is to allow easier configuration of the emulated networks that are mainly used for testing (demonstrating) 
-different SDN bootstrapping schemes. 
+The purpose of this emulator is to allow easier configuration of the emulated networks that are mainly used for testing (demonstrating) different SDN bootstrapping schemes. 
 
 #### Prerequisites
   * Ensure you are running a 64-bit host, Docker is not supporting 32-bit hosts
